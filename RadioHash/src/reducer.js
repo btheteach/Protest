@@ -1,7 +1,8 @@
 import {
     GENERATE_SEED,
     ADD_GROUP,
-    REMOVE_GROUP
+    REMOVE_GROUP,
+    FAIL_TO_CREATE_SEED
 } from './actions'
 
 const reducer = ( state = {
@@ -19,6 +20,10 @@ const reducer = ( state = {
                 ...state,
                 clusters: state.clusters.filter(s => s !== action.seed)
             }
+        case FAIL_TO_CREATE_SEED:
+            return { ...state, error: action.error}
+        default:
+            return state
     }
 };
 
