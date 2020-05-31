@@ -1,3 +1,4 @@
+import React, { useState } from 'react'
 import { SafeAreaView, View, Text, ScrollView} from 'react-native'
 
 const HomeScreen = () => {
