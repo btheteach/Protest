@@ -1,11 +1,5 @@
-export function generateSeed() {
-    return 1234
-}
+import CryptoJS from "react-native-crypto-js";
 
-export function addSeed() {
-    return 1234
-}
-
-export function removeSeed() {
-    return
+export function generateHash(seed) {
+    return seed
 }

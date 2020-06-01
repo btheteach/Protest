@@ -24,8 +24,12 @@ export const failCreateSeed = error => (
 
 export function createSeed () {
     return function async (dispatch){
-        const rand = RNRandomBytes.randomBytes(256).toString('base64')
+        return await RNRandomBytes.randomBytes(256, (error, buffer) => {
+            if (error){
+                return dispatch(failCreateSeed(error))
+            }
 
-        return dispatch(generateSeed(rand))
+            return dispatch(generateSeed(buffer.toString('base64')))
+        })
     }
 }
