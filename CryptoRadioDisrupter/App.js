@@ -1,17 +1,14 @@
 import React from 'react'
 import SeedCardComponent from './Components/SeedCardComponent'
-import { SafeAreaView, StyleSheet, Text } from 'react-native'
+import { SafeAreaView, StyleSheet } from 'react-native'
 import Constants from 'expo-constants'
-import Button from 'native-base'
 
 export default function App () {
   return (
     <>
       <SafeAreaView style={styles.container}>
-        <Text>Hey</Text>
         <SeedCardComponent />
       </SafeAreaView>
-      <Button>yull</Button>
     </>
   )
 }
