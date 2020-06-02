@@ -23,7 +23,7 @@ export const failCreateSeed = error => (
 )
 
 export function createSeed () {
-    return function async (dispatch){
+    return async function (dispatch){
         return await RNRandomBytes.randomBytes(256, (error, buffer) => {
             if (error){
                 return dispatch(failCreateSeed(error))
