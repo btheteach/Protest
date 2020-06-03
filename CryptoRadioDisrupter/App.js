@@ -1,19 +1,23 @@
 import React from 'react'
 import SeedCardComponent from './Components/SeedCardComponent'
 import AddSeedComponent from './Components/AddSeedComponent'
-import { SafeAreaView, StyleSheet } from 'react-native'
+import { SafeAreaView, StyleSheet, Dimensions } from 'react-native'
 import { Root } from 'native-base'
 import Constants from 'expo-constants'
 import * as Animatable from 'react-native-animatable'
+import { LinearGradient } from 'expo-linear-gradient'
+import { humanFont, sanFranciscoWeights } from 'react-native-typography'
 
-// Javascript style
+const windowWidth = Dimensions.get('window').width
+const windowHeight = Dimensions.get('window').height
+
 export default function App () {
   return (
     <>
-      {/* HTML STYLE */}
       <Root>
+        <LinearGradient colors={['#252525', '#181818']} style={DefaultStyles.background} />
         <SafeAreaView style={DefaultStyles.container}>
-          <Animatable.Text animation='fadeIn' style={DefaultStyles.titleText}>Crypto Radio Disrupter</Animatable.Text>
+          <Animatable.Text animation='fadeIn' style={DefaultStyles.titleText}>CRYPTO RADIO DISRUPTOR</Animatable.Text>
           <SeedCardComponent />
           <AddSeedComponent />
         </SafeAreaView>
@@ -23,13 +27,21 @@ export default function App () {
 }
 
 const DefaultStyles = StyleSheet.create({
+  background: {
+    position: 'absolute',
+    width: windowWidth,
+    height: windowHeight
+  },
   container: {
     flex: 1,
     marginTop: Constants.statusBarHeight
   },
   titleText: {
-    fontSize: 22,
-    padding: 15
+    fontSize: 24,
+    padding: 16,
+    ...humanFont,
+    ...sanFranciscoWeights.bold,
+    color: '#e16428'
   }
 })
 

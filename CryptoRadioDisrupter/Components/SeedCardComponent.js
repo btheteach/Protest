@@ -3,6 +3,7 @@ import { FlatList, StyleSheet, Clipboard } from 'react-native'
 import { Card } from '@paraboly/react-native-card'
 import { Toast } from 'native-base'
 import * as Animatable from 'react-native-animatable'
+import { humanFont, sanFranciscoWeights, material } from 'react-native-typography'
 
 const DATA = [
   {
@@ -33,10 +34,10 @@ function SeedCard ({ groupName, seedID, frequency }) {
       iconDisable
       onPress={() => { CopyToClipboard(seedID) }}
       topRightText={frequency + ('Hz')}
-      topRightStyle={SeedCardComponentStyle.topRightText}
+      topRightStyle={SeedCardComponentStyle.frequencyText}
       content={seedID}
-      contentStyle={SeedCardComponentStyle.content}
-      style={SeedCardComponentStyle.item}
+      contentStyle={SeedCardComponentStyle.seedText}
+      style={SeedCardComponentStyle.Card}
     />
   )
 }
@@ -64,8 +65,8 @@ export default function SeedCardComponent () {
 }
 
 const SeedCardComponentStyle = StyleSheet.create({
-  item: {
-    backgroundColor: '#f9c2ff',
+  Card: {
+    backgroundColor: '#414141',
     padding: 14,
     marginVertical: 8,
     marginHorizontal: 16,
@@ -73,24 +74,31 @@ const SeedCardComponentStyle = StyleSheet.create({
     elevation: 2
   },
   title: {
-    fontSize: 22,
-    color: '#fff',
+    ...humanFont,
+    ...sanFranciscoWeights.semibold,
+    fontSize: 24,
+    color: '#e16428',
     top: 10
   },
-  content: {
+  seedText: {
+    ...humanFont,
+    ...sanFranciscoWeights.regular,
     fontSize: 13,
-    color: '#fff',
+    color: '#f6e9e9',
     top: 10
   },
-  topRightText: {
+  frequencyText: {
+    ...humanFont,
+    ...sanFranciscoWeights.light,
     fontSize: 12,
-    color: '#fff',
+    color: '#28e164',
     bottom: 4
   },
   toastButton: {
 
   },
   toastButtonText: {
-
+    ...humanFont,
+    ...sanFranciscoWeights.semibold
   }
 })

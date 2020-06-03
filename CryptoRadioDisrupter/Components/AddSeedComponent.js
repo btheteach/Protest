@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { StyleSheet } from 'react-native'
+import { StyleSheet, Text } from 'react-native'
 import Modal from 'react-native-modal'
 import Constants from 'expo-constants'
 import { BlurView } from 'expo-blur'
@@ -8,7 +8,7 @@ import { Button, Icon } from 'native-base'
 import AntDesign from 'react-native-vector-icons/AntDesign'
 import { Sae } from 'react-native-textinput-effects'
 import * as Animatable from 'react-native-animatable'
-
+import { humanFont, sanFranciscoWeights } from 'react-native-typography'
 export default function AddSeedComponent () {
   const [isModalVisible, setModalVisible] = useState(false)
 
@@ -19,10 +19,11 @@ export default function AddSeedComponent () {
   const NameField = (
     <Sae
       label='Enter Name'
-      labelStyle={{ color: '#fff' }}
+      labelStyle={{ color: '#f6e9e9'}}
       iconClass={AntDesign}
       iconName='folderopen'
-      iconColor='white'
+      iconColor='#e16428'
+      placeholderTextColor='#f6e9e9'
       inputPadding={16}
       labelHeight={24}
       borderHeight={2}
@@ -35,11 +36,11 @@ export default function AddSeedComponent () {
   const IntervalField = (
     <Sae
       label='Enter Interval'
-      labelStyle={{ color: '#fff' }}
+      labelStyle={{ color: '#f6e9e9'}}
       iconClass={AntDesign}
       iconName='clockcircle'
-      iconColor='white'
-      placeholderTextColor='white'
+      iconColor='#e16428'
+      placeholderTextColor='#f6e9e9'
       inputPadding={16}
       labelHeight={24}
       borderHeight={2}
@@ -79,10 +80,10 @@ export default function AddSeedComponent () {
                 {IntervalField}
               </Animatable.View>
               <Animatable.View animation='fadeInUp'>
-                <Button rounded onPress={toggleModal} style={AddSeedCardComponentStyle.CreateSeedComponentButton}>
+                <Button bordered onPress={toggleModal} style={AddSeedCardComponentStyle.CreateSeedComponentButton}>
                   <Animatable.Text animation='fadeIn' style={AddSeedCardComponentStyle.ModalButtonText}>Create Seed</Animatable.Text>
                 </Button>
-                <Button rounded onPress={toggleModal} style={AddSeedCardComponentStyle.CloseModalButton}>
+                <Button bordered onPress={toggleModal} style={AddSeedCardComponentStyle.CloseModalButton}>
                   <Animatable.Text animation='fadeIn' style={AddSeedCardComponentStyle.ModalButtonText}>Close</Animatable.Text>
                 </Button>
               </Animatable.View>
@@ -109,18 +110,22 @@ const AddSeedCardComponentStyle = StyleSheet.create({
     padding: 10
   },
   ModalTitle: {
-    fontSize: 20,
-    alignSelf: 'center'
+    fontSize: 36,
+    alignSelf: 'center',
+    color: '#e16428',
+    ...humanFont,
+    ...sanFranciscoWeights.regular
   },
   AddSeedIconButton: {
     alignContent: 'center',
     alignSelf: 'auto',
     justifyContent: 'center',
     marginHorizontal: 30,
-    borderRadius: 10
+    borderRadius: 10,
+    borderColor: '#414141'
   },
   AddSeedIcon: {
-    color: 'red',
+    color: '#e16428',
     width: 25,
     height: 25
   },
@@ -128,13 +133,15 @@ const AddSeedCardComponentStyle = StyleSheet.create({
     margin: 10,
     padding: 10,
     top: 15,
-    borderRadius: 10
+    borderRadius: 10,
+    borderColor: '#f6e9e9'
   },
   CloseModalButton: {
     margin: 10,
     padding: 10,
     top: 15,
-    borderRadius: 10
+    borderRadius: 10,
+    borderColor: '#fff'
   },
   ModalButtonText:
   {
@@ -143,6 +150,9 @@ const AddSeedCardComponentStyle = StyleSheet.create({
     alignSelf: 'auto',
     justifyContent: 'center',
     textAlign: 'center',
+    color: '#e16428',
+    ...humanFont,
+    ...sanFranciscoWeights.light,
     flex: 1
   },
   InputFields: {
