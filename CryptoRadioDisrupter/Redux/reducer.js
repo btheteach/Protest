@@ -1,6 +1,6 @@
 import {
-    GENERATE_SEED,
-    ADD_GROUP,
+    GENERATE_CLUSTER,
+    ADD_CLUSTER,
     REMOVE_GROUP,
     FAIL_TO_CREATE_SEED
 } from './actions'
@@ -10,7 +10,7 @@ const reducer = ( state = {
     clusters: []
 }, action ) => {
     switch (action.type) {
-        case ( GENERATE_SEED || ADD_GROUP ):
+        case ( GENERATE_CLUSTER || ADD_CLUSTER ):
             return { 
                 ...state, 
                 clusters: state.clusters.concat(action.seed)
