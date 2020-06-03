@@ -1,7 +1,7 @@
 import {
     GENERATE_CLUSTER,
     ADD_CLUSTER,
-    REMOVE_GROUP,
+    REMOVE_CLUSTER,
     FAIL_TO_CREATE_SEED
 } from './actions'
 
@@ -15,7 +15,7 @@ const reducer = ( state = {
                 ...state, 
                 clusters: state.clusters.concat(action.seed)
             }
-        case REMOVE_GROUP: 
+        case REMOVE_CLUSTER: 
             return {
                 ...state,
                 clusters: state.clusters.filter(s => s !== action.seed)
