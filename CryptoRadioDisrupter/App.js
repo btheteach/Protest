@@ -2,14 +2,17 @@ import React from 'react'
 import SeedCardComponent from './Components/SeedCardComponent'
 import { SafeAreaView, StyleSheet } from 'react-native'
 import Constants from 'expo-constants'
+import { Provider } from 'react-redux'
+
+import store from './Redux/store'
 
 export default function App () {
   return (
-    <>
+    <Provider store={store}>
       <SafeAreaView style={styles.container}>
         <SeedCardComponent />
       </SafeAreaView>
-    </>
+    </Provider>
   )
 }
 
