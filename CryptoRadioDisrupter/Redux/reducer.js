@@ -13,7 +13,7 @@ const reducer = ( state = {
         case ( GENERATE_SEED || ADD_GROUP ):
             return { 
                 ...state, 
-                clusters: state.clusters.push(action.seed)
+                clusters: state.clusters.concat(action.seed)
             }
         case REMOVE_GROUP: 
             return {

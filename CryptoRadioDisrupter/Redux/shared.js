@@ -1,4 +1,4 @@
-export function generateSeed() {
+export function generateHash() {
     return 1234
 }
 
