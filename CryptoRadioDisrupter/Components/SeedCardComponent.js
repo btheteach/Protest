@@ -1,6 +1,8 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { FlatList, StyleSheet } from 'react-native'
 import { Card } from '@paraboly/react-native-card'
+import store from '../Redux/store'
+import { createSeed } from '../Redux/actions' 
 
 const DATA = [
   {
@@ -33,6 +35,17 @@ function SeedCard ({ groupName, seedID, frequency }) {
 }
 
 export default function SeedCardComponent () {
+  useEffect(() => {
+    let test = async () => {
+      await store.dispatch(createSeed({
+        name: 'cluster1',
+        interval: 5
+      }))
+    }
+
+    test()
+  },[])
+
   return (
     <FlatList
       data={DATA}
