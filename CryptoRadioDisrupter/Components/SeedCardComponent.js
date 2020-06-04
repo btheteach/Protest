@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { FlatList, StyleSheet } from 'react-native'
 import { Card } from '@paraboly/react-native-card'
 import store from '../Redux/store'
-import { addCluster } from '../Redux/actions'
+import { addCluster, createSeed } from '../Redux/actions'
 
 const DATA = [
   {
@@ -48,7 +48,12 @@ export default function SeedCardComponent () {
         seedID: 'litty'
       })
 
-      store.dispatch(addAction)
+      await store.dispatch(addAction)
+      
+      await store.dispatch(createSeed({
+        name: 'asdf',
+        interval: 5
+      }))
     }
     test()
     return unsubscribe
