@@ -1,4 +1,4 @@
-import { getRandomBytesAsync } from 'expo-random'
+import MersenneTwister from '../shared/MersenneTwister'
 
 export const GENERATE_CLUSTER = 'GENERATE_CLUSTER'
 export const ADD_CLUSTER = 'ADD_CLUSTER'
@@ -23,14 +23,11 @@ export const failCreateSeed = error => (
 
 export function createSeed (cluster) {
     return async function (dispatch){
+        const mt = new MersenneTwister()
         
-        return await getRandomBytesAsync(256)
-            .then(bytes => {
-                return dispatch(generateCluster({
-                    ...cluster,
-                    seedID: bytes.toString('base64')
-                }))
-            })
-            .catch(error => dispatch(failCreateSeed(error)))
+        return dispatch(generateCluster({
+            ...cluster,
+            seedID: mt.int()
+        }))
     }
 }
