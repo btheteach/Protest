@@ -1,7 +1,4 @@
-export function generateHash(preHash) {
-    return 1234
-}
-
+import { digestStringAsync, } from 'expo-crypto'
 
 export function generateChannels(seed, timeInterval, rangeBegin,rangeEnd) {
     const d = new Date();
@@ -9,11 +6,18 @@ export function generateChannels(seed, timeInterval, rangeBegin,rangeEnd) {
     n = n - (n%timeInterval); //n rounded to lower bound of time interval
     let preHash = seed + n;
 
-    let postHash1 = generateHash(preHash);
-    let postHash2 = generateHash(preHash+1);
-    let postHash3 = generateHash(preHash+2);
+    let postHash = {
+        first: generateHash(preHash),
+        second: generateHash(preHash+1),
+        third: generateHash(preHash+2)
+    }
+    
+    let convertToChannels = hash => (hash%(rangeEnd-rangeBegin))+rangeBegin
+    let channels = {
+        first: convertToChannels(postHash.first),
+        second: convertToChannels(postHash.second),
+        third: convertToChannels(postHash.third)
+    }
 
-    let channel1 = (postHash1%(rangeEnd-rangeBegin))+rangeBegin;
-    let channel2 = (postHash2%(rangeEnd-rangeBegin))+rangeBegin;
-    let channel3 = (postHash3%(rangeEnd-rangeBegin))+rangeBegin;
+    return channels
 }
