@@ -13,8 +13,8 @@ export const addCluster = cluster => (
     { type: ADD_CLUSTER, cluster }
 );
 
-export const removeCluster = cluster => (
-    { type: REMOVE_CLUSTER, cluster }
+export const removeCluster = seed => (
+    { type: REMOVE_CLUSTER, seed }
 );
 
 export const failCreateSeed = error => (
