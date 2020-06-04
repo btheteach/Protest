@@ -1,20 +1,20 @@
 import { getRandomBytesAsync } from 'expo-random'
 
-export const GENERATE_SEED = 'GENERATE_SEED'
-export const ADD_GROUP = 'ADD_GROUP'
-export const REMOVE_GROUP = 'REMOVE_GROUP'
+export const GENERATE_CLUSTER = 'GENERATE_CLUSTER'
+export const ADD_CLUSTER = 'ADD_CLUSTER'
+export const REMOVE_CLUSTER = 'REMOVE_CLUSTER'
 export const FAIL_TO_CREATE_SEED = 'FAIL_TO_CREATE_SEED'
 
-export const generateCluster = seed => (
-    { type: GENERATE_SEED, seed }
+export const generateCluster = cluster => (
+    { type: GENERATE_CLUSTER, cluster }
 );
 
-export const addCluster = seed => (
-    { type: ADD_GROUP, seed }
+export const addCluster = cluster => (
+    { type: ADD_CLUSTER, cluster }
 );
 
-export const removeGroup = seed => (
-    { type: REMOVE_GROUP, seed }
+export const removeCluster = cluster => (
+    { type: REMOVE_CLUSTER, cluster }
 );
 
 export const failCreateSeed = error => (
@@ -22,9 +22,9 @@ export const failCreateSeed = error => (
 )
 
 export function createSeed (cluster) {
-    return function async (dispatch){
+    return async function (dispatch){
         
-        return getRandomBytesAsync(256)
+        return await getRandomBytesAsync(256)
             .then(bytes => {
                 let seed = bytes.toString('base64')
                 return dispatch(generateCluster({
