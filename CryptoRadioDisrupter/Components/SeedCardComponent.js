@@ -3,6 +3,7 @@ import { FlatList, StyleSheet } from 'react-native'
 import { Card } from '@paraboly/react-native-card'
 import store from '../Redux/store'
 import { addCluster, createSeed } from '../Redux/actions'
+import { generateChannels, TIME_INTERVAL } from '../shared/shared'
 
 const DATA = [
   {
@@ -22,13 +23,15 @@ const DATA = [
   }
 ]
 
+const getFrequency = (seed, interval = undefined) => setInterval(generateChannels, interval, seed, interval);
+
 function SeedCard ({ groupName, seedID, frequency = 101.3 }) {
   return (
     <Card
       title={groupName}
       iconDisable
       onPress={() => {}}
-      bottomRightText={frequency}
+      bottomRightText={getFrequency(seedID)}
       content={seedID}
     />
   )
@@ -40,6 +43,12 @@ export default function SeedCardComponent () {
     let c = store.getState().clusters
     setClusterData(c)
   })
+
+  const cleanUp = () => {
+    clearInterval()
+    unsubscribe()
+  }
+
   useEffect(() => {
     const test = async () => {
       const addAction = addCluster({
@@ -56,7 +65,7 @@ export default function SeedCardComponent () {
       }))
     }
     test()
-    return unsubscribe
+    return cleanUp
   }, [])
 
   return (
