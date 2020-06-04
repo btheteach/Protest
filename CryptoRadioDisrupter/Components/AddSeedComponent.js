@@ -9,59 +9,87 @@ import AntDesign from 'react-native-vector-icons/AntDesign'
 import { Sae } from 'react-native-textinput-effects'
 import * as Animatable from 'react-native-animatable'
 import { humanFont, sanFranciscoWeights } from 'react-native-typography'
-export default function AddSeedComponent () {
-  const [isModalVisible, setModalVisible] = useState(false)
+import { connect } from "react-redux";
+import { addCard } from "../Redux/actions";
 
-  const toggleModal = () => {
-    setModalVisible(!isModalVisible)
+class AddSeedComponent extends React.Component {
+  state = {
+    isModalVisible: false,
+    name: '',
+    interval: ''
   }
 
-  const NameField = (
-    <Sae
-      label='Enter Name'
-      labelStyle={{ color: '#f6e9e9'}}
-      iconClass={AntDesign}
-      iconName='folderopen'
-      iconColor='#e16428'
-      placeholderTextColor='#f6e9e9'
-      inputPadding={16}
-      labelHeight={24}
-      borderHeight={2}
-      autoCapitalize='none'
-      autoCorrect={false}
-      style={AddSeedCardComponentStyle.InputFields}
-    />
-  )
+  handleNameChange = name => {
+    this.setState({ name })
+  }
 
-  const IntervalField = (
-    <Sae
-      label='Enter Interval'
-      labelStyle={{ color: '#f6e9e9'}}
-      iconClass={AntDesign}
-      iconName='clockcircle'
-      iconColor='#e16428'
-      placeholderTextColor='#f6e9e9'
-      inputPadding={16}
-      labelHeight={24}
-      borderHeight={2}
-      autoCapitalize='none'
-      autoCorrect={false}
-      style={AddSeedCardComponentStyle.InputFields}
-    />
-  )
+  handleIntervalChange = interval => {
+    this.setState({ interval })
+  }
 
-  return (
-    <>
-      <Animatable.View animation='fadeIn'>
+  toggleModal = () => {
+    this.setState({ isModalVisible: !this.state.isModalVisible });
+  }
+
+  createNewCard = () => {
+    const card = {name: this.state.name, interval: this.state.interval}
+    this.props.createCard(card);
+    this.toggleModal();
+    
+  }
+
+  NameField = () => {
+    return (
+      <Sae
+        label='Enter Name'
+        labelStyle={{ color: '#f6e9e9' }}
+        iconClass={AntDesign}
+        iconName='folderopen'
+        iconColor='#e16428'
+        placeholderTextColor='#f6e9e9'
+        inputPadding={16}
+        labelHeight={24}
+        borderHeight={2}
+        onChangeText={this.handleNameChange}
+        autoCapitalize='none'
+        autoCorrect={false}
+        style={AddSeedCardComponentStyle.InputFields}
+      />
+    )
+  }
+
+  IntervalField = () => {
+    return (
+      < Sae
+        label='Enter Interval'
+        labelStyle={{ color: '#f6e9e9' }}
+        iconClass={AntDesign}
+        iconName='clockcircle'
+        iconColor='#e16428'
+        placeholderTextColor='#f6e9e9'
+        inputPadding={16}
+        labelHeight={24}
+        borderHeight={2}
+        onChangeText={this.handleIntervalChange}
+        autoCapitalize='none'
+        autoCorrect={false}
+        style={AddSeedCardComponentStyle.InputFields}
+      />
+    )
+  }
+
+  render() {
+    return (
+      <Animatable.View animation='fadeIn' >
 
         <Animatable.View animation='fadeInLeft'>
-          <Button iconLeft bordered style={AddSeedCardComponentStyle.AddSeedIconButton} onPress={toggleModal}>
+          <Button iconLeft bordered style={AddSeedCardComponentStyle.AddSeedIconButton} onPress={this.toggleModal}>
             <Icon name='add-circle' style={AddSeedCardComponentStyle.AddSeedIcon} />
           </Button>
         </Animatable.View>
 
         <Modal
-          isVisible={isModalVisible}
+          isVisible={this.state.isModalVisible}
           style={AddSeedCardComponentStyle.Modal}
           backdropColor='#000'
           backdropOpacity={0.8}
@@ -76,14 +104,14 @@ export default function AddSeedComponent () {
             <Animatable.Text animation='fadeInDown' style={AddSeedCardComponentStyle.ModalTitle}>Seed Generator</Animatable.Text>
             <Animatable.View animation='fadeIn'>
               <Animatable.View animation='fadeInUp'>
-                {NameField}
-                {IntervalField}
+                {this.NameField()}
+                {this.IntervalField()}
               </Animatable.View>
               <Animatable.View animation='fadeInUp'>
-                <Button bordered onPress={toggleModal} style={AddSeedCardComponentStyle.CreateSeedComponentButton}>
+                <Button bordered onPress={this.createNewCard} style={AddSeedCardComponentStyle.CreateSeedComponentButton}>
                   <Animatable.Text animation='fadeIn' style={AddSeedCardComponentStyle.ModalButtonText}>Create Seed</Animatable.Text>
                 </Button>
-                <Button bordered onPress={toggleModal} style={AddSeedCardComponentStyle.CloseModalButton}>
+                <Button bordered onPress={this.toggleModal} style={AddSeedCardComponentStyle.CloseModalButton}>
                   <Animatable.Text animation='fadeIn' style={AddSeedCardComponentStyle.ModalButtonText}>Close</Animatable.Text>
                 </Button>
               </Animatable.View>
@@ -91,8 +119,8 @@ export default function AddSeedComponent () {
           </BlurView>
         </Modal>
       </Animatable.View>
-    </>
-  )
+    )
+  }
 }
 
 const AddSeedCardComponentStyle = StyleSheet.create({
@@ -160,3 +188,9 @@ const AddSeedCardComponentStyle = StyleSheet.create({
     padding: 10
   }
 })
+
+const mapDispatchToProps = dispatch => ({
+  createCard: card => dispatch(addCard(card)),
+});
+
+export default connect(null, mapDispatchToProps)(AddSeedComponent);

@@ -7,13 +7,17 @@ import Constants from 'expo-constants'
 import * as Animatable from 'react-native-animatable'
 import { LinearGradient } from 'expo-linear-gradient'
 import { humanFont, sanFranciscoWeights } from 'react-native-typography'
+import { Provider } from 'react-redux';
+import { createStore } from 'redux'
+import rootReducer from './Redux/reducers';
 
 const windowWidth = Dimensions.get('window').width
 const windowHeight = Dimensions.get('window').height
+const store = createStore( rootReducer);
 
 export default function App () {
   return (
-    <>
+    <Provider store={store}>
       <Root>
         <LinearGradient colors={['#252525', '#181818']} style={DefaultStyles.background} />
         <SafeAreaView style={DefaultStyles.container}>
@@ -22,7 +26,7 @@ export default function App () {
           <AddSeedComponent />
         </SafeAreaView>
       </Root>
-    </>
+      </Provider>
   )
 }
 
