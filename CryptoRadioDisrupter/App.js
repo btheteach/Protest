@@ -1,12 +1,13 @@
 import React from 'react'
 import SeedCardComponent from './Components/SeedCardComponent'
-import { SafeAreaView, StyleSheet } from 'react-native'
+import { SafeAreaView, StyleSheet, Text } from 'react-native'
 import Constants from 'expo-constants'
 
 export default function App () {
   return (
     <>
       <SafeAreaView style={styles.container}>
+      <Text>Crypto Radio Disrupter</Text>
         <SeedCardComponent />
       </SafeAreaView>
     </>
