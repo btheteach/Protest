@@ -53,7 +53,7 @@ export default function SeedCardComponent () {
     const test = async () => {
       const addAction = addCluster({
         groupName: 'litGroup',
-        interval: 10,
+        interval: TIME_INTERVAL.THIRTY_SECONDS,
         seedID: 'litty'
       })
 
@@ -61,7 +61,7 @@ export default function SeedCardComponent () {
       
       await store.dispatch(createSeed({
         name: 'asdf',
-        interval: 5
+        interval: TIME_INTERVAL.THIRTY_SECONDS
       }))
     }
     test()
