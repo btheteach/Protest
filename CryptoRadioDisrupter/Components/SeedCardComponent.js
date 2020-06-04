@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import { FlatList, StyleSheet } from 'react-native'
 import { Card } from '@paraboly/react-native-card'
 import store from '../Redux/store'
@@ -22,7 +22,7 @@ const DATA = [
   }
 ]
 
-function SeedCard ({ groupName, seedID, frequency }) {
+function SeedCard ({ groupName, seedID, frequency = 101.3 }) {
   return (
     <Card
       title={groupName}
@@ -35,6 +35,10 @@ function SeedCard ({ groupName, seedID, frequency }) {
 }
 
 export default function SeedCardComponent () {
+  const [clusters, setClusters] = useState([])
+  const unsubscribe = store.subscribe(() => {
+    setClusters(store.getState().clusters)
+  })
   useEffect(() => {
     let test = async () => {
       const createAction = {
@@ -53,12 +57,13 @@ export default function SeedCardComponent () {
     }
 
     test()
+    return unsubscribe
   },[])
 
   return (
     <FlatList
-      data={DATA}
-      renderItem={({ item }) => <SeedCard seedID={item.seedID} groupName={item.groupName} frequency={item.frequency} />}
+      data={clusters}
+      renderItem={({ item }) => <SeedCard seed={item.seed} name={item.name} />}
       keyExtractor={item => item.seedID}
     />
   )
