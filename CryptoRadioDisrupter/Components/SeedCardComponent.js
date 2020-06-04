@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { FlatList, StyleSheet } from 'react-native'
 import { Card } from '@paraboly/react-native-card'
 import store from '../Redux/store'
-import { createSeed, addCluster, removeCluster } from '../Redux/actions' 
+import { addCluster } from '../Redux/actions'
 
 const DATA = [
   {
@@ -35,36 +35,30 @@ function SeedCard ({ groupName, seedID, frequency = 101.3 }) {
 }
 
 export default function SeedCardComponent () {
-  const [clusters, setClusters] = useState([])
+  const [clusterData, setClusterData] = useState(store.getState().clusters)
   const unsubscribe = store.subscribe(() => {
-    setClusters(store.getState().clusters)
+    let c = store.getState().clusters
+    setClusterData(c)
   })
   useEffect(() => {
-    let test = async () => {
-      const createAction = {
-        name: 'cluster1',
-        interval: 5
-      }
-      await store.dispatch(createSeed(createAction))
-
-      const addAction = {
-        name: 'cluster2',
+    const test = async () => {
+      const addAction = addCluster({
+        groupName: 'litGroup',
         interval: 10,
-        seed: 'seed'
-      }
+        seedID: 'litty'
+      })
 
-      await store.dispatch(addCluster(addAction))
+      store.dispatch(addAction)
     }
-
     test()
     return unsubscribe
-  },[])
+  }, [])
 
   return (
     <FlatList
-      data={clusters}
-      renderItem={({ item }) => <SeedCard seed={item.seed} name={item.name} />}
-      keyExtractor={item => item.seedID}
+      data={clusterData}
+      renderItem={({ item }) => <SeedCard seedID={item.seedID} groupName={item.groupName}/>} 
+      keyExtractor={(item, index) => index.toString()}
     />
   )
 }

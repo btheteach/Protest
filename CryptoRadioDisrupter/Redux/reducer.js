@@ -10,7 +10,8 @@ const reducer = ( state = {
     clusters: []
 }, action ) => {
     switch (action.type) {
-        case ( GENERATE_CLUSTER || ADD_CLUSTER ):
+        case ADD_CLUSTER:
+        case GENERATE_CLUSTER:
             return { 
                 ...state, 
                 clusters: state.clusters.concat(action.cluster)
@@ -18,7 +19,7 @@ const reducer = ( state = {
         case REMOVE_CLUSTER: 
             return {
                 ...state,
-                clusters: state.clusters.filter(c => c.seed !== action.seed)
+                clusters: state.clusters.filter(c => c.seed !== action.seedID)
             }
         case FAIL_TO_CREATE_SEED:
             return { ...state, error: action.error}

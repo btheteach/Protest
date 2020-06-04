@@ -13,8 +13,8 @@ export const addCluster = cluster => (
     { type: ADD_CLUSTER, cluster }
 );
 
-export const removeCluster = seed => (
-    { type: REMOVE_CLUSTER, seed }
+export const removeCluster = seedID => (
+    { type: REMOVE_CLUSTER, seedID }
 );
 
 export const failCreateSeed = error => (
@@ -26,10 +26,9 @@ export function createSeed (cluster) {
         
         return await getRandomBytesAsync(256)
             .then(bytes => {
-                let seed = bytes.toString('base64')
                 return dispatch(generateCluster({
                     ...cluster,
-                    seed: seed
+                    seedID: bytes.toString('base64')
                 }))
             })
             .catch(error => dispatch(failCreateSeed(error)))
