@@ -3,7 +3,7 @@ import { FlatList, StyleSheet } from 'react-native'
 import { Card } from '@paraboly/react-native-card'
 import store from '../Redux/store'
 import { addCluster, createSeed } from '../Redux/actions'
-import { generateChannels, TIME_INTERVAL } from '../shared/shared'
+import { generateChannels, TIME_INTERVAL, MILLISECONDS, MINUTE_IN_MILLISECONDS } from '../shared/shared'
 
 const DATA = [
   {
@@ -23,24 +23,37 @@ const DATA = [
   }
 ]
 
-function SeedCard ({ groupName, seedID, interval }) {
-  const [frequency, setFrequency] = useState(generateChannels(seedID).first)
-  useEffect(() => {
-    const timerID = setInterval(() => {
-      generateChannels(seedID)
-        .then(channels => {
-          console.log(channels)
-          setFrequency(channels.first)
-        })
-        .catch(error => {
-          console.log('Failed to generate channel with error')
-          console.log(error)
-        })
-    }, interval)
+const getChannels = async (seedID, setFrequency) => await generateChannels(seedID)
+  .then(channels => {
+    setFrequency(channels.first)
+  })
+  .catch(error => {
+    console.log('Failed to generate channel with error')
+    console.log(error)
+  })
 
-    const unsubscribe = () => {
-      clearInterval(timerID)
+function SeedCard ({ groupName, seedID, interval }) {
+  const [frequency, setFrequency] = useState()
+
+  useEffect(() => {
+    const firstIteration = async () => {
+      await getChannels(seedID, setFrequency)
     }
+    firstIteration()
+
+    let timerID,
+    moment = new Date() 
+    timoutInMilliseconds = interval === TIME_INTERVAL.THIRTY_SECONDS
+      ? moment.getSeconds() * MILLISECONDS
+      : (moment.getMinutes() * MINUTE_IN_MILLISECONDS) + (moment.getSeconds * MILLISECONDS)
+
+    setTimeout(() => {
+      timerID = setInterval(() => {
+        getChannels(seedID, setFrequency)
+      }, interval)
+    }, timoutInMilliseconds)
+    
+    const unsubscribe = () => clearInterval(timerID)
 
     return unsubscribe
   }, [frequency])
