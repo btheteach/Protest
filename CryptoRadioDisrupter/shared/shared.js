@@ -18,21 +18,26 @@ export const TIME_INTERVAL = {
 
 
 const generateHash = async pre => {
+    let first, second, third
     try {
-        return await {
-            first: digestStringAsync(
-                CryptoDigestAlgorithm.SHA256,
-                pre.toString()
-            ),
-            second: digestStringAsync(
-                CryptoDigestAlgorithm.SHA256,
-                (pre + 1).toString()
-            ),
-            third: digestStringAsync(
-                CryptoDigestAlgorithm.SHA256,
-                (pre + 2).toString()
-            )
-        }
+        first = await digestStringAsync(
+            CryptoDigestAlgorithm.SHA256,
+            pre.toString()
+        )
+        second = await digestStringAsync(
+            CryptoDigestAlgorithm.SHA256,
+            (pre+1).toString()
+        )
+        third = await digestStringAsync(
+            CryptoDigestAlgorithm.SHA256,
+            (pre + 2).toString()
+        )
+
+        first = parseInt(first, 16)
+        second = parseInt(second, 16)
+        third = parseInt(third, 16)
+        
+        return { first, second, third}
     } catch (err) {
         console.log(`Failed to hash string with error: ${err}`)
     }
@@ -44,14 +49,17 @@ export function generateChannels(seed, timeInterval = TIME_INTERVAL.THIRTY_SECON
     n = n - (n%timeInterval); //n rounded to lower bound of time interval
     let preHash = seed + n;
 
-    let postHash = generateHash(preHash)
-    
-    let convertToChannels = hash => ((parseInt(hash))%(rangeEnd-rangeBegin))+rangeBegin
-    let channels = {
-        first: convertToChannels(postHash.first),
-        second: convertToChannels(postHash.second),
-        third: convertToChannels(postHash.third)
-    }
-
-    return channels
+    return generateHash(preHash)
+        .then(postHash => {
+            let convertToChannels = hash => Math.floor(((parseInt(hash))%(rangeEnd-rangeBegin))+rangeBegin)
+            let channels = {
+                first: convertToChannels(postHash.first),
+                second: convertToChannels(postHash.second),
+                third: convertToChannels(postHash.third)
+            }
+            return channels
+        })
+        .catch(error => {
+            console.log(`Failed to generate hash with error: ${error}`)
+        })
 }

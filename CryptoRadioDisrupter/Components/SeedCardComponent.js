@@ -23,15 +23,34 @@ const DATA = [
   }
 ]
 
-const getFrequency = (seed, interval = undefined) => setInterval(generateChannels, interval, seed, interval);
+function SeedCard ({ groupName, seedID, interval }) {
+  const [frequency, setFrequency] = useState(generateChannels(seedID).first)
+  useEffect(() => {
+    const timerID = setInterval(() => {
+      generateChannels(seedID)
+        .then(channels => {
+          console.log(channels)
+          setFrequency(channels.first)
+        })
+        .catch(error => {
+          console.log('Failed to generate channel with error')
+          console.log(error)
+        })
+    }, interval)
 
-function SeedCard ({ groupName, seedID, frequency = 101.3 }) {
+    const unsubscribe = () => {
+      clearInterval(timerID)
+    }
+
+    return unsubscribe
+  }, [frequency])
+
   return (
     <Card
       title={groupName}
       iconDisable
       onPress={() => {}}
-      bottomRightText={getFrequency(seedID)}
+      bottomRightText={frequency}
       content={seedID}
     />
   )
@@ -43,11 +62,6 @@ export default function SeedCardComponent () {
     let c = store.getState().clusters
     setClusterData(c)
   })
-
-  const cleanUp = () => {
-    clearInterval()
-    unsubscribe()
-  }
 
   useEffect(() => {
     const test = async () => {
@@ -65,13 +79,14 @@ export default function SeedCardComponent () {
       }))
     }
     test()
-    return cleanUp
+    
+    return unsubscribe
   }, [])
 
   return (
     <FlatList
       data={clusterData}
-      renderItem={({ item }) => <SeedCard seedID={item.seedID} groupName={item.groupName}/>} 
+      renderItem={({ item }) => <SeedCard seedID={item.seedID} groupName={item.groupName} interval={item.interval}/>} 
       keyExtractor={(item, index) => index.toString()}
     />
   )
