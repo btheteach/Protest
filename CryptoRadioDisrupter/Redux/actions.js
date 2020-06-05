@@ -1,10 +1,11 @@
 import MersenneTwister from '../shared/MersenneTwister'
-import { AsyncStorage } from 'react-native';
+import { standardizeTime } from '../shared/shared'
 
 export const GENERATE_CLUSTER = 'GENERATE_CLUSTER'
 export const ADD_CLUSTER = 'ADD_CLUSTER'
 export const REMOVE_CLUSTER = 'REMOVE_CLUSTER'
 export const FAIL_TO_CREATE_SEED = 'FAIL_TO_CREATE_SEED'
+export const ADD_CARD = 'ADD_CARD'
 
 export const FAIL_TO_FETCH_LOCAL_DATA = 'FAIL_TO_FETCH_LOCAL_DATA'
 
@@ -34,6 +35,7 @@ export function createSeed (cluster) {
         
         return dispatch(generateCluster({
             ...cluster,
+            interval: standardizeTime(cluster.interval),
             seedID: mt.int()
         }))
     }

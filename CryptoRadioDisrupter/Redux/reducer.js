@@ -5,10 +5,10 @@ import {
     FAIL_TO_CREATE_SEED
 } from './actions'
 
-const reducer = ( state = {
+const createSeed = (state = {
     error: {},
     clusters: []
-}, action ) => {
+}, action) => {
     switch (action.type) {
         case ADD_CLUSTER:
         case GENERATE_CLUSTER:
@@ -22,10 +22,10 @@ const reducer = ( state = {
                 clusters: state.clusters.filter(c => c.seed !== action.seedID)
             }
         case FAIL_TO_CREATE_SEED:
-            return { ...state, error: action.error}
+            return { ...state, error: action.error }
         default:
             return state
     }
 };
 
-export default clustersReducer = reducer;
+export default createSeed;

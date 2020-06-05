@@ -1,27 +1,21 @@
-import React, { useState, useEffect } from 'react'
-import { FlatList, StyleSheet } from 'react-native'
+import React, {useState, useEffect } from 'react'
+import { FlatList, StyleSheet, Clipboard } from 'react-native'
 import { Card } from '@paraboly/react-native-card'
-import store from '../Redux/store'
+import { Toast } from 'native-base'
+import * as Animatable from 'react-native-animatable'
+import { humanFont, sanFranciscoWeights } from 'react-native-typography'
 import { addCluster, createSeed } from '../Redux/actions'
 import { generateChannels, TIME_INTERVAL, MILLISECONDS, MINUTE_IN_MILLISECONDS } from '../shared/shared'
 
-const DATA = [
-  {
-    seedID: 'bd7acbea-c1b1-46c2-aed5-3ad53abb28ba',
-    groupName: 'North',
-    frequency: 420.55
-  },
-  {
-    seedID: '3ac68afc-c605-48d3-a4f8-fbd91aa97f63',
-    groupName: 'River',
-    frequency: 458.85
-  },
-  {
-    seedID: '58694a0f-3da1-471f-bd96-145571e29d72',
-    groupName: 'Chicago',
-    frequency: 328.15
-  }
-]
+const copyToClipboard = (seedID) => {
+  Toast.show({
+    text: 'Seed ID Copied!',
+    buttonText: 'Okay',
+    style: SeedCardComponentStyle.toastButton,
+    textStyle: SeedCardComponentStyle.toastButtonText
+  })
+  Clipboard.setString(seedID)
+}
 
 const getChannels = async (seedID, setFrequency) => await generateChannels(seedID)
   .then(channels => {
@@ -64,10 +58,14 @@ function SeedCard ({ groupName, seedID, interval }) {
   return (
     <Card
       title={groupName}
+      titleStyle={SeedCardComponentStyle.title}
       iconDisable
-      onPress={() => {}}
-      bottomRightText={frequency}
+      onPress={() => copyToClipboard(seedID) }
+      topRightText={frequency + ('Hz')}
+      topRightStyle={SeedCardComponentStyle.frequencyText}
       content={seedIDAsInt}
+      contentStyle={SeedCardComponentStyle.seedText}
+      style={SeedCardComponentStyle.Card}
     />
   )
 }
@@ -100,22 +98,52 @@ export default function SeedCardComponent () {
   }, [])
 
   return (
-    <FlatList
-      data={clusterData}
-      renderItem={({ item }) => <SeedCard seedID={item.seedID.toString()} groupName={item.groupName} interval={item.interval.toString()}/>} 
-      keyExtractor={(item, index) => index.toString()}
-    />
+    <Animatable.View animation='fadeInLeft'>
+        <FlatList
+          data={clusterData}
+          renderItem={({ item }) => <SeedCard seedID={item.seedID.toString()} groupName={item.groupName} interval={item.interval.toString()}/>} 
+          keyExtractor={(item, index) => index.toString()}
+        />
+      </Animatable.View>
+    
   )
 }
 
 const SeedCardComponentStyle = StyleSheet.create({
-  item: {
-    backgroundColor: '#f9c2ff',
-    padding: 20,
+  Card: {
+    backgroundColor: '#414141',
+    padding: 14,
     marginVertical: 8,
-    marginHorizontal: 16
+    marginHorizontal: 16,
+    borderRadius: 14,
+    elevation: 2
   },
   title: {
-    fontSize: 32
+    ...humanFont,
+    ...sanFranciscoWeights.semibold,
+    fontSize: 24,
+    color: '#e16428',
+    top: 10
+  },
+  seedText: {
+    ...humanFont,
+    ...sanFranciscoWeights.regular,
+    fontSize: 13,
+    color: '#f6e9e9',
+    top: 10
+  },
+  frequencyText: {
+    ...humanFont,
+    ...sanFranciscoWeights.light,
+    fontSize: 12,
+    color: '#28e164',
+    bottom: 4
+  },
+  toastButton: {
+
+  },
+  toastButtonText: {
+    ...humanFont,
+    ...sanFranciscoWeights.semibold
   }
 })

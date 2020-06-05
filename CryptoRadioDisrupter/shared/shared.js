@@ -16,6 +16,29 @@ export const TIME_INTERVAL = {
     ONE_HOUR: HOURS_IN_MILLISECONDS
 }
 
+export const standardizeTime = time => {
+    if (!Number.isInteger){
+        return TIME_INTERVAL.THIRTY_SECONDS
+    }
+
+    switch (time) {
+        case 1:
+            return TIME_INTERVAL.ONE_MINUTE
+        case 2:
+            return TIME_INTERVAL.TWO_MINUTES
+        case 5:
+            return TIME_INTERVAL.FIVE_MINUTES
+        case 10:
+            return TIME_INTERVAL.TEN_MINUTES
+        case 20:
+            return TIME_INTERVAL.TWENTY_MINUTES
+        case 30:
+            return TIME_INTERVAL.THIRTY_MINUTES
+        default:
+            return TIME_INTERVAL.THIRTY_SECONDS
+    }
+}
+
 
 const generateHash = async pre => {
     let first, second, third
