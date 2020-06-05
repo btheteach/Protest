@@ -7,13 +7,13 @@ import Constants from 'expo-constants'
 import * as Animatable from 'react-native-animatable'
 import { LinearGradient } from 'expo-linear-gradient'
 import { humanFont, sanFranciscoWeights } from 'react-native-typography'
-import { Provider } from 'react-redux';
+import { Provider } from 'react-redux'
 import { createStore } from 'redux'
-import rootReducer from './Redux/reducers';
+import rootReducer from './Redux/reducers'
 
 const windowWidth = Dimensions.get('window').width
 const windowHeight = Dimensions.get('window').height
-const store = createStore( rootReducer);
+const store = createStore(rootReducer)
 
 export default function App () {
   return (
@@ -26,7 +26,7 @@ export default function App () {
           <AddSeedComponent />
         </SafeAreaView>
       </Root>
-      </Provider>
+    </Provider>
   )
 }
 
