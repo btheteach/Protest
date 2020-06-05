@@ -73,7 +73,7 @@ class SeedCardComponent extends React.Component {
               style={SeedCardComponentStyle.Card}
             />
           }
-          keyExtractor={item => item.id}
+          keyExtractor={item => item.id.toString()}
         />
       </Animatable.View>
     )
