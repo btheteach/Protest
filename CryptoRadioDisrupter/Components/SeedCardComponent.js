@@ -34,22 +34,25 @@ const getChannels = async (seedID, setFrequency) => await generateChannels(seedI
 
 function SeedCard ({ groupName, seedID, interval }) {
   const [frequency, setFrequency] = useState()
+  let seedIDAsInt = Number.isInteger(seedID) ? parseInt(seedID) : seedID
+  let intervalAsInt = parseInt(interval)
 
   useEffect(() => {
     const firstIteration = async () => {
-      await getChannels(seedID, setFrequency)
+      await getChannels(seedIDAsInt, setFrequency)
     }
     firstIteration()
 
     let timerID,
     moment = new Date() 
-    timoutInMilliseconds = interval === TIME_INTERVAL.THIRTY_SECONDS
+    timoutInMilliseconds = intervalAsInt === TIME_INTERVAL.THIRTY_SECONDS
       ? moment.getSeconds() * MILLISECONDS
       : (moment.getMinutes() * MINUTE_IN_MILLISECONDS) + (moment.getSeconds * MILLISECONDS)
 
+    timoutInMilliseconds %= intervalAsInt
     setTimeout(() => {
       timerID = setInterval(() => {
-        getChannels(seedID, setFrequency)
+        getChannels(seedIDAsInt, setFrequency)
       }, interval)
     }, timoutInMilliseconds)
     
@@ -64,7 +67,7 @@ function SeedCard ({ groupName, seedID, interval }) {
       iconDisable
       onPress={() => {}}
       bottomRightText={frequency}
-      content={seedID}
+      content={seedIDAsInt}
     />
   )
 }
@@ -87,7 +90,7 @@ export default function SeedCardComponent () {
       await store.dispatch(addAction)
       
       await store.dispatch(createSeed({
-        name: 'asdf',
+        groupName: 'asdf',
         interval: TIME_INTERVAL.THIRTY_SECONDS
       }))
     }
@@ -99,7 +102,7 @@ export default function SeedCardComponent () {
   return (
     <FlatList
       data={clusterData}
-      renderItem={({ item }) => <SeedCard seedID={item.seedID} groupName={item.groupName} interval={item.interval}/>} 
+      renderItem={({ item }) => <SeedCard seedID={item.seedID.toString()} groupName={item.groupName} interval={item.interval.toString()}/>} 
       keyExtractor={(item, index) => index.toString()}
     />
   )
