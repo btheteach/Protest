@@ -15,6 +15,7 @@ import GlobalPerformanceLogger from '../Utilities/GlobalPerformanceLogger';
 import type {IPerformanceLogger} from '../Utilities/createPerformanceLogger';
 import PerformanceLoggerContext from '../Utilities/PerformanceLoggerContext';
 const React = require('react');
+const ReactFabricIndicator = require('./ReactFabricIndicator');
 
 const invariant = require('invariant');
 
@@ -27,22 +28,19 @@ function renderApplication<Props: Object>(
   rootTag: any,
   WrapperComponent?: ?React.ComponentType<*>,
   fabric?: boolean,
-  showArchitectureIndicator?: boolean,
+  showFabricIndicator?: boolean,
   scopedPerformanceLogger?: IPerformanceLogger,
-  isLogBox?: boolean,
 ) {
   invariant(rootTag, 'Expect to have a valid rootTag, instead got ', rootTag);
 
   const renderable = (
     <PerformanceLoggerContext.Provider
       value={scopedPerformanceLogger ?? GlobalPerformanceLogger}>
-      <AppContainer
-        rootTag={rootTag}
-        fabric={fabric}
-        showArchitectureIndicator={showArchitectureIndicator}
-        WrapperComponent={WrapperComponent}
-        internal_excludeLogBox={isLogBox}>
+      <AppContainer rootTag={rootTag} WrapperComponent={WrapperComponent}>
         <RootComponent {...initialProps} rootTag={rootTag} />
+        {fabric === true && showFabricIndicator === true ? (
+          <ReactFabricIndicator />
+        ) : null}
       </AppContainer>
     </PerformanceLoggerContext.Provider>
   );

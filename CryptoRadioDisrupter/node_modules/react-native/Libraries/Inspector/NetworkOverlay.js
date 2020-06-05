@@ -44,7 +44,6 @@ type NetworkRequestInfo = {
   messages?: string,
   serverClose?: Object,
   serverError?: Object,
-  ...
 };
 
 type Props = $ReadOnly<{||}>;
@@ -102,7 +101,7 @@ class NetworkOverlay extends React.Component<Props, State> {
   // Map of `socketId` -> `index in `this.state.requests`.
   _socketIdMap = {};
   // Map of `xhr._index` -> `index in `this.state.requests`.
-  _xhrIdMap: {[key: number]: number, ...} = {};
+  _xhrIdMap: {[key: number]: number} = {};
 
   state: State = {
     detailRowId: null,

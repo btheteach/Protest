@@ -15,7 +15,6 @@ const flattenStyle = require('../StyleSheet/flattenStyle');
 
 function DeprecatedStyleSheetPropType(shape: {
   [key: string]: ReactPropsCheckType,
-  ...,
 }): ReactPropsCheckType {
   const shapePropType = deprecatedCreateStrictShapeTypeChecker(shape);
   return function(props, propName, componentName, location?, ...rest) {

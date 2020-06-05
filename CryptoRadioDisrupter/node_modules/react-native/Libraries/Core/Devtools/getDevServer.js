@@ -18,7 +18,6 @@ const FALLBACK = 'http://localhost:8081/';
 type DevServerInfo = {
   url: string,
   bundleLoadedFromServer: boolean,
-  ...
 };
 
 /**

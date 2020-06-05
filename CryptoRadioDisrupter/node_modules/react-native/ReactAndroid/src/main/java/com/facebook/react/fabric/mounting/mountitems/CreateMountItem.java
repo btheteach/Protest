@@ -1,13 +1,11 @@
-/*
+/**
  * Copyright (c) Facebook, Inc. and its affiliates.
  *
- * This source code is licensed under the MIT license found in the
- * LICENSE file in the root directory of this source tree.
+ * <p>This source code is licensed under the MIT license found in the LICENSE file in the root
+ * directory of this source tree.
  */
-
 package com.facebook.react.fabric.mounting.mountitems;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.fabric.mounting.MountingManager;
@@ -16,21 +14,21 @@ import com.facebook.react.uimanager.ThemedReactContext;
 
 public class CreateMountItem implements MountItem {
 
-  @NonNull private final String mComponent;
+  private final String mComponent;
   private final int mRootTag;
   private final int mReactTag;
-  @NonNull private final ThemedReactContext mContext;
+  private final ThemedReactContext mContext;
   private final @Nullable ReadableMap mProps;
   private final @Nullable StateWrapper mStateWrapper;
   private final boolean mIsLayoutable;
 
   public CreateMountItem(
-      @NonNull ThemedReactContext context,
+      ThemedReactContext context,
       int rootTag,
       int reactTag,
-      @NonNull String component,
+      String component,
       @Nullable ReadableMap props,
-      @NonNull StateWrapper stateWrapper,
+      StateWrapper stateWrapper,
       boolean isLayoutable) {
     mContext = context;
     mComponent = component;
@@ -42,7 +40,7 @@ public class CreateMountItem implements MountItem {
   }
 
   @Override
-  public void execute(@NonNull MountingManager mountingManager) {
+  public void execute(MountingManager mountingManager) {
     mountingManager.createView(
         mContext, mComponent, mReactTag, mProps, mStateWrapper, mIsLayoutable);
   }

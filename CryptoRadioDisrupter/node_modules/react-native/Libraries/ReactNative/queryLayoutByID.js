@@ -7,7 +7,6 @@
  * @flow
  * @format
  */
-
 'use strict';
 
 const UIManager = require('./UIManager');

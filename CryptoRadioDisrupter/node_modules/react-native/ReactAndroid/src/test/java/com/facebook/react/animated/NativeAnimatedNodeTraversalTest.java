@@ -1,10 +1,9 @@
-/*
+/**
  * Copyright (c) Facebook, Inc. and its affiliates.
  *
- * This source code is licensed under the MIT license found in the
- * LICENSE file in the root directory of this source tree.
+ * <p>This source code is licensed under the MIT license found in the LICENSE file in the root
+ * directory of this source tree.
  */
-
 package com.facebook.react.animated;
 
 import static org.fest.assertions.api.Assertions.assertThat;
@@ -981,7 +980,7 @@ public class NativeAnimatedNodeTraversalTest {
     assertThat(stylesCaptor.getValue().getDouble("opacity")).isEqualTo(0);
 
     reset(mUIManagerMock);
-    mNativeAnimatedNodesManager.restoreDefaultValues(propsNodeTag);
+    mNativeAnimatedNodesManager.restoreDefaultValues(propsNodeTag, viewTag);
     verify(mUIManagerMock).synchronouslyUpdateViewOnUIThread(eq(viewTag), stylesCaptor.capture());
     assertThat(stylesCaptor.getValue().isNull("opacity"));
   }

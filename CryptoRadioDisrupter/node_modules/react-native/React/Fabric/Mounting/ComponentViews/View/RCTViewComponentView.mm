@@ -1,4 +1,4 @@
-/*
+/**
  * Copyright (c) Facebook, Inc. and its affiliates.
  *
  * This source code is licensed under the MIT license found in the
@@ -229,11 +229,6 @@ using namespace facebook::react;
     self.accessibilityElement.accessibilityElementsHidden = newViewProps.accessibilityElementsHidden;
   }
 
-  if (oldViewProps.accessibilityTraits != newViewProps.accessibilityTraits) {
-    self.accessibilityElement.accessibilityTraits =
-        RCTUIAccessibilityTraitsFromAccessibilityTraits(newViewProps.accessibilityTraits);
-  }
-
   // `accessibilityIgnoresInvertColors`
   if (oldViewProps.accessibilityIgnoresInvertColors != newViewProps.accessibilityIgnoresInvertColors) {
 #if defined(__IPHONE_OS_VERSION_MAX_ALLOWED) && __IPHONE_OS_VERSION_MAX_ALLOWED >= 110000 /* __IPHONE_11_0 */
@@ -257,9 +252,7 @@ using namespace facebook::react;
 - (void)updateLayoutMetrics:(LayoutMetrics const &)layoutMetrics
            oldLayoutMetrics:(LayoutMetrics const &)oldLayoutMetrics
 {
-  // Using stored `_layoutMetrics` as `oldLayoutMetrics` here to avoid
-  // re-applying individual sub-values which weren't changed.
-  [super updateLayoutMetrics:layoutMetrics oldLayoutMetrics:_layoutMetrics];
+  [super updateLayoutMetrics:layoutMetrics oldLayoutMetrics:oldLayoutMetrics];
 
   _layoutMetrics = layoutMetrics;
   _needsInvalidateLayer = YES;
@@ -346,6 +339,14 @@ static RCTBorderColors RCTBorderColorsFromBorderColors(BorderColors borderColors
                          .right = RCTCGColorRefUnretainedFromSharedColor(borderColors.right)};
 }
 
+static UIEdgeInsets UIEdgeInsetsFromBorderInsets(EdgeInsets edgeInsets)
+{
+  return UIEdgeInsets{.left = (CGFloat)edgeInsets.left,
+                      .top = (CGFloat)edgeInsets.top,
+                      .bottom = (CGFloat)edgeInsets.bottom,
+                      .right = (CGFloat)edgeInsets.right};
+}
+
 static RCTBorderStyle RCTBorderStyleFromBorderStyle(BorderStyle borderStyle)
 {
   switch (borderStyle) {
@@ -428,7 +429,7 @@ static RCTBorderStyle RCTBorderStyleFromBorderStyle(BorderStyle borderStyle)
         RCTBorderStyleFromBorderStyle(borderMetrics.borderStyles.left),
         layer.bounds.size,
         RCTCornerRadiiFromBorderRadii(borderMetrics.borderRadii),
-        RCTUIEdgeInsetsFromEdgeInsets(borderMetrics.borderWidths),
+        UIEdgeInsetsFromBorderInsets(borderMetrics.borderWidths),
         RCTBorderColorsFromBorderColors(borderMetrics.borderColors),
         _backgroundColor.CGColor,
         self.clipsToBounds);
@@ -536,42 +537,26 @@ static NSString *RCTRecursiveAccessibilityLabel(UIView *view)
 
 - (BOOL)accessibilityActivate
 {
-  if (_eventEmitter && _props->onAccessibilityTap) {
-    _eventEmitter->onAccessibilityTap();
-    return YES;
-  } else {
-    return NO;
-  }
+  _eventEmitter->onAccessibilityTap();
+  return YES;
 }
 
 - (BOOL)accessibilityPerformMagicTap
 {
-  if (_eventEmitter && _props->onAccessibilityMagicTap) {
-    _eventEmitter->onAccessibilityMagicTap();
-    return YES;
-  } else {
-    return NO;
-  }
+  _eventEmitter->onAccessibilityMagicTap();
+  return YES;
 }
 
 - (BOOL)accessibilityPerformEscape
 {
-  if (_eventEmitter && _props->onAccessibilityEscape) {
-    _eventEmitter->onAccessibilityEscape();
-    return YES;
-  } else {
-    return NO;
-  }
+  _eventEmitter->onAccessibilityEscape();
+  return YES;
 }
 
 - (BOOL)didActivateAccessibilityCustomAction:(UIAccessibilityCustomAction *)action
 {
-  if (_eventEmitter && _props->onAccessibilityAction) {
-    _eventEmitter->onAccessibilityAction(RCTStringFromNSString(action.name));
-    return YES;
-  } else {
-    return NO;
-  }
+  _eventEmitter->onAccessibilityAction(RCTStringFromNSString(action.name));
+  return YES;
 }
 
 - (SharedTouchEventEmitter)touchEventEmitterAtPoint:(CGPoint)point

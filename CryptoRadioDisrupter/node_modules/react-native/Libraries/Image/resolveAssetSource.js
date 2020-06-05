@@ -4,11 +4,12 @@
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
  *
+ *
+ * Resolves an asset into a `source` for `Image`.
+ *
  * @format
  * @flow
  */
-
-// Resolves an asset into a `source` for `Image`.
 
 'use strict';
 

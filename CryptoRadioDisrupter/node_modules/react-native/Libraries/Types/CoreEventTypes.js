@@ -4,19 +4,16 @@
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
  *
- * @flow strict-local
+ * @flow strict
  * @format
  */
 
 'use strict';
 
-import * as React from 'react';
-import type {HostComponent} from '../Renderer/shims/ReactNativeTypes';
-
 export type SyntheticEvent<T> = $ReadOnly<{|
   bubbles: ?boolean,
   cancelable: ?boolean,
-  currentTarget: number | React.ElementRef<HostComponent<mixed>>,
+  currentTarget: number,
   defaultPrevented: ?boolean,
   dispatchConfig: $ReadOnly<{|
     registrationName: string,
@@ -29,7 +26,7 @@ export type SyntheticEvent<T> = $ReadOnly<{|
   isTrusted: ?boolean,
   nativeEvent: T,
   persist: () => void,
-  target: ?number | React.ElementRef<HostComponent<mixed>>,
+  target: ?number,
   timeStamp: number,
   type: ?string,
 |}>;
@@ -130,27 +127,5 @@ export type ScrollEvent = SyntheticEvent<
     |}>,
     zoomScale?: number,
     responderIgnoreScroll?: boolean,
-  |}>,
->;
-
-export type BlurEvent = SyntheticEvent<
-  $ReadOnly<{|
-    target: number,
-  |}>,
->;
-
-export type FocusEvent = SyntheticEvent<
-  $ReadOnly<{|
-    target: number,
-  |}>,
->;
-
-export type MouseEvent = SyntheticEvent<
-  $ReadOnly<{|
-    clientX: number,
-    clientY: number,
-    pageX: number,
-    pageY: number,
-    timestamp: number,
   |}>,
 >;

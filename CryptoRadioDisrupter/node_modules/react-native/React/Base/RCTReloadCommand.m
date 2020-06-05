@@ -1,4 +1,4 @@
-/*
+/**
  * Copyright (c) Facebook, Inc. and its affiliates.
  *
  * This source code is licensed under the MIT license found in the
@@ -9,57 +9,33 @@
 
 #import "RCTAssert.h"
 #import "RCTKeyCommands.h"
-#import "RCTUtils.h"
 
+/** main queue only */
 static NSHashTable<id<RCTReloadListener>> *listeners;
-static NSLock *listenersLock;
-static NSURL *bundleURL;
-
-NSString *const RCTTriggerReloadCommandNotification = @"RCTTriggerReloadCommandNotification";
-NSString *const RCTTriggerReloadCommandReasonKey = @"reason";
-NSString *const RCTTriggerReloadCommandBundleURLKey = @"bundleURL";
 
 void RCTRegisterReloadCommandListener(id<RCTReloadListener> listener)
 {
-  if (!listenersLock) {
-    listenersLock = [NSLock new];
-  }
-  [listenersLock lock];
-  if (!listeners) {
-    listeners = [NSHashTable weakObjectsHashTable];
-  }
-#if RCT_DEV
   RCTAssertMainQueue(); // because registerKeyCommandWithInput: must be called on the main thread
   static dispatch_once_t onceToken;
   dispatch_once(&onceToken, ^{
+    listeners = [NSHashTable weakObjectsHashTable];
     [[RCTKeyCommands sharedInstance] registerKeyCommandWithInput:@"r"
                                                    modifierFlags:UIKeyModifierCommand
                                                           action:
      ^(__unused UIKeyCommand *command) {
-      RCTTriggerReloadCommandListeners(@"Command + R");
-    }];
+       RCTTriggerReloadCommandListeners();
+     }];
   });
-#endif
   [listeners addObject:listener];
-  [listenersLock unlock];
 }
 
-void RCTTriggerReloadCommandListeners(NSString *reason)
+void RCTTriggerReloadCommandListeners(void)
 {
-  [listenersLock lock];
-  [[NSNotificationCenter defaultCenter] postNotificationName:RCTTriggerReloadCommandNotification
-                                                      object:nil
-                                                    userInfo:@{RCTTriggerReloadCommandReasonKey: RCTNullIfNil(reason),
-                                                               RCTTriggerReloadCommandBundleURLKey: RCTNullIfNil(bundleURL)
-                                                    }];
-
-  for (id<RCTReloadListener> l in [listeners allObjects]) {
+  RCTAssertMainQueue();
+  // Copy to protect against mutation-during-enumeration.
+  // If listeners hasn't been initialized yet we get nil, which works just fine.
+  NSArray<id<RCTReloadListener>> *copiedListeners = [listeners allObjects];
+  for (id<RCTReloadListener> l in copiedListeners) {
     [l didReceiveReloadCommand];
   }
-  [listenersLock unlock];
-}
-
-void RCTReloadCommandSetBundleURL(NSURL *URL)
-{
-  bundleURL = URL;
 }

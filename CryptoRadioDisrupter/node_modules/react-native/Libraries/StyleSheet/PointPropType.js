@@ -13,5 +13,4 @@
 export type PointProp = $ReadOnly<{
   x: number,
   y: number,
-  ...
 }>;

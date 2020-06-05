@@ -12,17 +12,15 @@
 
 import NativePlatformConstantsIOS from './NativePlatformConstantsIOS';
 
-export type PlatformSelectSpec<D, N, I> = {
+export type PlatformSelectSpec<D, I> = {
   default?: D,
-  native?: N,
   ios?: I,
-  ...
 };
 
 const Platform = {
   __constants: null,
   OS: 'ios',
-  get Version(): string {
+  get Version(): $FlowFixMe {
     return this.constants.osVersion;
   },
   get constants(): {|
@@ -61,8 +59,8 @@ const Platform = {
     }
     return false;
   },
-  select: <D, N, I>(spec: PlatformSelectSpec<D, N, I>): D | N | I =>
-    'ios' in spec ? spec.ios : 'native' in spec ? spec.native : spec.default,
+  select: <D, I>(spec: PlatformSelectSpec<D, I>): D | I =>
+    'ios' in spec ? spec.ios : spec.default,
 };
 
 module.exports = Platform;

@@ -19,6 +19,7 @@ import type {Node} from 'react';
 import type {TextStyleProp} from '../StyleSheet/StyleSheet';
 import type {
   AccessibilityRole,
+  AccessibilityStates,
   AccessibilityState,
 } from '../Components/View/ViewAccessibility';
 
@@ -42,6 +43,7 @@ export type TextProps = $ReadOnly<{|
   accessibilityHint?: ?Stringish,
   accessibilityLabel?: ?Stringish,
   accessibilityRole?: ?AccessibilityRole,
+  accessibilityStates?: ?AccessibilityStates,
   accessibilityState?: ?AccessibilityState,
 
   /**

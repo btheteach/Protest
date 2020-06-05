@@ -1,10 +1,9 @@
-/*
+/**
  * Copyright (c) Facebook, Inc. and its affiliates.
  *
- * This source code is licensed under the MIT license found in the
- * LICENSE file in the root directory of this source tree.
+ * <p>This source code is licensed under the MIT license found in the LICENSE file in the root
+ * directory of this source tree.
  */
-
 package com.facebook.react.testing;
 
 import static org.mockito.Mockito.mock;
@@ -13,7 +12,6 @@ import android.test.AndroidTestCase;
 import android.view.View;
 import android.view.ViewGroup;
 import androidx.annotation.Nullable;
-import androidx.test.InstrumentationRegistry;
 import com.facebook.infer.annotation.Assertions;
 import com.facebook.react.bridge.BaseJavaModule;
 import com.facebook.react.bridge.CatalystInstance;
@@ -25,7 +23,7 @@ import com.facebook.react.bridge.UiThreadUtil;
 import com.facebook.react.common.futures.SimpleSettableFuture;
 import com.facebook.react.devsupport.interfaces.DevSupportManager;
 import com.facebook.react.modules.core.ReactChoreographer;
-import com.facebook.react.modules.core.TimingModule;
+import com.facebook.react.modules.core.Timing;
 import com.facebook.react.testing.idledetection.ReactBridgeIdleSignaler;
 import com.facebook.react.testing.idledetection.ReactIdleDetectionUtil;
 import com.facebook.soloader.SoLoader;
@@ -133,17 +131,15 @@ public abstract class ReactIntegrationTestCase extends AndroidTestCase {
   /**
    * Timing module needs to be created on the main thread so that it gets the correct Choreographer.
    */
-  protected TimingModule createTimingModule() {
-    final SimpleSettableFuture<TimingModule> simpleSettableFuture =
-        new SimpleSettableFuture<TimingModule>();
+  protected Timing createTimingModule() {
+    final SimpleSettableFuture<Timing> simpleSettableFuture = new SimpleSettableFuture<Timing>();
     UiThreadUtil.runOnUiThread(
         new Runnable() {
           @Override
           public void run() {
             ReactChoreographer.initialize();
-            TimingModule timingModule =
-                new TimingModule(getContext(), mock(DevSupportManager.class));
-            simpleSettableFuture.set(timingModule);
+            Timing timing = new Timing(getContext(), mock(DevSupportManager.class));
+            simpleSettableFuture.set(timing);
           }
         });
     try {
@@ -165,7 +161,9 @@ public abstract class ReactIntegrationTestCase extends AndroidTestCase {
   }
 
   public void waitForIdleSync() {
-    InstrumentationRegistry.getInstrumentation().waitForIdleSync();
+    return;
+    // TODO: re-enable after cleanup of android-x migration
+    // InstrumentationRegistry.getInstrumentation().waitForIdleSync();
   }
 
   public void waitForBridgeAndUIIdle() {

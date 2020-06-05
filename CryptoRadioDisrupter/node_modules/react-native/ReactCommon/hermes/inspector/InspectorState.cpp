@@ -1,10 +1,3 @@
-/*
- * Copyright (c) Facebook, Inc. and its affiliates.
- *
- * This source code is licensed under the MIT license found in the
- * LICENSE file in the root directory of this source tree.
- */
-
 #include "InspectorState.h"
 
 #include <glog/logging.h>
@@ -303,15 +296,14 @@ bool InspectorState::Running::pause() {
   switch (pendingPauseState) {
     case AsyncPauseState::None:
       // haven't yet requested a pause, so do it now
-      pendingPauseState = AsyncPauseState::Explicit;
       inspector_.triggerAsyncPause(false);
+      pendingPauseState = AsyncPauseState::Explicit;
       canPause = true;
       break;
     case AsyncPauseState::Implicit:
       // already requested an implicit pause on our own, upgrade it to an
       // explicit pause
       pendingPauseState = AsyncPauseState::Explicit;
-      inspector_.triggerAsyncPause(false);
       canPause = true;
       break;
     case AsyncPauseState::Explicit:
@@ -335,7 +327,6 @@ void InspectorState::Paused::onEnter(InspectorState *prevState) {
   }
 
   const debugger::ProgramState &state = inspector_.debugger_.getProgramState();
-  inspector_.alertIfPausedInSupersededFile();
   inspector_.observer_.onPause(inspector_, state);
 }
 

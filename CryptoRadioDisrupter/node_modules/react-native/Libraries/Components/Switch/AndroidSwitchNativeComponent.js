@@ -4,61 +4,45 @@
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
  *
- * @flow strict-local
+ * @flow
  * @format
  */
 
 'use strict';
 
-import * as React from 'react';
+const {NativeComponent} = require('../../Renderer/shims/ReactNative');
 
-import type {
-  WithDefault,
-  BubblingEventHandler,
-} from 'react-native/Libraries/Types/CodegenTypes';
+const requireNativeComponent = require('../../ReactNative/requireNativeComponent');
 
-import codegenNativeCommands from 'react-native/Libraries/Utilities/codegenNativeCommands';
-import codegenNativeComponent from 'react-native/Libraries/Utilities/codegenNativeComponent';
-import type {HostComponent} from 'react-native/Libraries/Renderer/shims/ReactNativeTypes';
-
-import type {ColorValue} from '../../StyleSheet/StyleSheetTypes';
+import type {SyntheticEvent} from '../../Types/CoreEventTypes';
 import type {ViewProps} from '../View/ViewPropTypes';
 
-type SwitchChangeEvent = $ReadOnly<{|
-  value: boolean,
-|}>;
+type SwitchChangeEvent = SyntheticEvent<
+  $ReadOnly<{|
+    value: boolean,
+  |}>,
+>;
 
 type NativeProps = $ReadOnly<{|
   ...ViewProps,
 
   // Props
-  disabled?: WithDefault<boolean, false>,
-  enabled?: WithDefault<boolean, true>,
-  thumbColor?: ?ColorValue,
-  trackColorForFalse?: ?ColorValue,
-  trackColorForTrue?: ?ColorValue,
-  value?: WithDefault<boolean, false>,
-  on?: WithDefault<boolean, false>,
-  thumbTintColor?: ?ColorValue,
-  trackTintColor?: ?ColorValue,
+  disabled?: ?boolean,
+  enabled?: ?boolean,
+  thumbColor?: ?string,
+  trackColorForFalse?: ?string,
+  trackColorForTrue?: ?string,
+  value?: ?boolean,
+  on?: ?boolean,
+  thumbTintColor?: ?string,
+  trackTintColor?: ?string,
 
   // Events
-  onChange?: BubblingEventHandler<SwitchChangeEvent>,
+  onChange?: ?(event: SwitchChangeEvent) => mixed,
 |}>;
 
-type NativeType = HostComponent<NativeProps>;
+type SwitchNativeComponentType = Class<NativeComponent<NativeProps>>;
 
-interface NativeCommands {
-  +setNativeValue: (
-    viewRef: React.ElementRef<NativeType>,
-    value: boolean,
-  ) => void;
-}
-
-export const Commands: NativeCommands = codegenNativeCommands<NativeCommands>({
-  supportedCommands: ['setNativeValue'],
-});
-
-export default (codegenNativeComponent<NativeProps>('AndroidSwitch', {
-  interfaceOnly: true,
-}): NativeType);
+module.exports = ((requireNativeComponent(
+  'AndroidSwitch',
+): any): SwitchNativeComponentType);

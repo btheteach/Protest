@@ -1,4 +1,4 @@
-/*
+/**
  * Copyright (c) Facebook, Inc. and its affiliates.
  *
  * This source code is licensed under the MIT license found in the
@@ -29,9 +29,7 @@ class ModalHostViewState final {
   ModalHostViewState(Size screenSize_) : screenSize(screenSize_){};
 
 #ifdef ANDROID
-  ModalHostViewState(
-      ModalHostViewState const &previousState,
-      folly::dynamic data)
+  ModalHostViewState(folly::dynamic data)
       : screenSize(Size{(Float)data["screenWidth"].getDouble(),
                         (Float)data["screenHeight"].getDouble()}){};
 #endif

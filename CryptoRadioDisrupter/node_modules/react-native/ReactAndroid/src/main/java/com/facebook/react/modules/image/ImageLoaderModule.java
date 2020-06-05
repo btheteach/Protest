@@ -1,10 +1,9 @@
-/*
+/**
  * Copyright (c) Facebook, Inc. and its affiliates.
  *
- * This source code is licensed under the MIT license found in the
- * LICENSE file in the root directory of this source tree.
+ * <p>This source code is licensed under the MIT license found in the LICENSE file in the root
+ * directory of this source tree.
  */
-
 package com.facebook.react.modules.image;
 
 import android.net.Uri;
@@ -16,7 +15,6 @@ import com.facebook.datasource.BaseDataSubscriber;
 import com.facebook.datasource.DataSource;
 import com.facebook.datasource.DataSubscriber;
 import com.facebook.drawee.backends.pipeline.Fresco;
-import com.facebook.fbreact.specs.NativeImageLoaderAndroidSpec;
 import com.facebook.imagepipeline.core.ImagePipeline;
 import com.facebook.imagepipeline.image.CloseableImage;
 import com.facebook.imagepipeline.request.ImageRequest;
@@ -26,6 +24,7 @@ import com.facebook.react.bridge.GuardedAsyncTask;
 import com.facebook.react.bridge.LifecycleEventListener;
 import com.facebook.react.bridge.Promise;
 import com.facebook.react.bridge.ReactApplicationContext;
+import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableMap;
@@ -35,7 +34,7 @@ import com.facebook.react.modules.fresco.ReactNetworkImageRequest;
 import com.facebook.react.views.imagehelper.ImageSource;
 
 @ReactModule(name = ImageLoaderModule.NAME)
-public class ImageLoaderModule extends NativeImageLoaderAndroidSpec
+public class ImageLoaderModule extends ReactContextBaseJavaModule
     implements LifecycleEventListener {
 
   private static final String ERROR_INVALID_URI = "E_INVALID_URI";
@@ -183,15 +182,12 @@ public class ImageLoaderModule extends NativeImageLoaderAndroidSpec
    * Prefetches the given image to the Fresco image disk cache.
    *
    * @param uriString the URI of the remote image to prefetch
-   * @param requestIdAsDouble the client-supplied request ID used to identify this request
+   * @param requestId the client-supplied request ID used to identify this request
    * @param promise the promise that is fulfilled when the image is successfully prefetched or
    *     rejected when there is an error
    */
-  @Override
-  public void prefetchImage(
-      final String uriString, final double requestIdAsDouble, final Promise promise) {
-    final int requestId = (int) requestIdAsDouble;
-
+  @ReactMethod
+  public void prefetchImage(final String uriString, final int requestId, final Promise promise) {
     if (uriString == null || uriString.isEmpty()) {
       promise.reject(ERROR_INVALID_URI, "Cannot prefetch an image for an empty URI");
       return;
@@ -231,9 +227,9 @@ public class ImageLoaderModule extends NativeImageLoaderAndroidSpec
     prefetchSource.subscribe(prefetchSubscriber, CallerThreadExecutor.getInstance());
   }
 
-  @Override
-  public void abortRequest(double requestId) {
-    DataSource<Void> request = removeRequest((int) requestId);
+  @ReactMethod
+  public void abortRequest(final int requestId) {
+    DataSource<Void> request = removeRequest(requestId);
     if (request != null) {
       request.close();
     }

@@ -5,14 +5,13 @@
  * LICENSE file in the root directory of this source tree.
  *
  * @format
- * @flow strict-local
+ * @flow
  */
 
 'use strict';
 
 const ReactFeatureFlags = {
   debugRenderPhaseSideEffects: false,
-  enableNativeTargetAsInstance: false,
 };
 
 module.exports = ReactFeatureFlags;

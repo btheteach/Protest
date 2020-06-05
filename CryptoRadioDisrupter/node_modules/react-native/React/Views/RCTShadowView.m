@@ -1,4 +1,4 @@
-/*
+/**
  * Copyright (c) Facebook, Inc. and its affiliates.
  *
  * This source code is licensed under the MIT license found in the
@@ -57,7 +57,6 @@ typedef NS_ENUM(unsigned int, meta_prop_t) {
 }
 
 @synthesize reactTag = _reactTag;
-@synthesize rootTag = _rootTag;
 
 // YogaNode API
 
@@ -157,11 +156,13 @@ static void RCTProcessMetaPropsBorder(const YGValue metaProps[META_PROP_COUNT], 
 - (CGRect)measureLayoutRelativeToAncestor:(RCTShadowView *)ancestor
 {
   CGPoint offset = CGPointZero;
+  NSInteger depth = 30; // max depth to search
   RCTShadowView *shadowView = self;
-  while (shadowView && shadowView != ancestor) {
+  while (depth && shadowView && shadowView != ancestor) {
     offset.x += shadowView.layoutMetrics.frame.origin.x;
     offset.y += shadowView.layoutMetrics.frame.origin.y;
     shadowView = shadowView->_superview;
+    depth--;
   }
   if (ancestor != shadowView) {
     return CGRectNull;
@@ -171,9 +172,11 @@ static void RCTProcessMetaPropsBorder(const YGValue metaProps[META_PROP_COUNT], 
 
 - (BOOL)viewIsDescendantOf:(RCTShadowView *)ancestor
 {
+  NSInteger depth = 30; // max depth to search
   RCTShadowView *shadowView = self;
-  while (shadowView && shadowView != ancestor) {
+  while (depth && shadowView && shadowView != ancestor) {
     shadowView = shadowView->_superview;
+    depth--;
   }
   return ancestor == shadowView;
 }

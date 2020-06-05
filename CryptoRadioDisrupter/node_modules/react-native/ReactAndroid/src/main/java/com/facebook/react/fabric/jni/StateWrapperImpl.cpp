@@ -1,12 +1,9 @@
-/*
- * Copyright (c) Facebook, Inc. and its affiliates.
- *
- * This source code is licensed under the MIT license found in the
- * LICENSE file in the root directory of this source tree.
- */
+// Copyright 2004-present Facebook. All Rights Reserved.
+// This source code is licensed under the MIT license found in the
+// LICENSE file in the root directory of this source tree.
 
 #include "StateWrapperImpl.h"
-#include <fbjni/fbjni.h>
+#include <fb/fbjni.h>
 #include <react/jni/ReadableNativeMap.h>
 
 using namespace facebook::jni;
@@ -17,8 +14,8 @@ namespace react {
 /**
  * Called from Java constructor through the JNI.
  */
-jni::local_ref<StateWrapperImpl::jhybriddata> StateWrapperImpl::initHybrid(
-    jni::alias_ref<jclass>) {
+jni::local_ref<StateWrapperImpl::jhybriddata>
+StateWrapperImpl::initHybrid(jni::alias_ref<jclass>) {
   return makeCxxInstance();
 }
 
@@ -29,7 +26,7 @@ jni::local_ref<ReadableNativeMap::jhybridobject> StateWrapperImpl::getState() {
   return readableNativeMap;
 }
 
-void StateWrapperImpl::updateStateImpl(NativeMap *map) {
+void StateWrapperImpl::updateStateImpl(NativeMap* map) {
   // Get folly::dynamic from map
   auto dynamicMap = map->consume();
   // Set state
@@ -38,8 +35,8 @@ void StateWrapperImpl::updateStateImpl(NativeMap *map) {
 
 void StateWrapperImpl::registerNatives() {
   registerHybrid({
-      makeNativeMethod("initHybrid", StateWrapperImpl::initHybrid),
-      makeNativeMethod("getState", StateWrapperImpl::getState),
+      makeNativeMethod("initHybrid",      StateWrapperImpl::initHybrid),
+      makeNativeMethod("getState",        StateWrapperImpl::getState),
       makeNativeMethod("updateStateImpl", StateWrapperImpl::updateStateImpl),
   });
 }

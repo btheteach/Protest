@@ -7,7 +7,6 @@
  * @flow
  * @format
  */
-
 'use strict';
 
 // placeholder token that will be replaced by signedsource script

@@ -5,16 +5,13 @@
  * LICENSE file in the root directory of this source tree.
  *
  * @format
- * @flow strict-local
+ * @flow
  */
 
 'use strict';
 
-import * as React from 'react';
-
-import codegenNativeCommands from 'react-native/Libraries/Utilities/codegenNativeCommands';
 import codegenNativeComponent from '../../Utilities/codegenNativeComponent';
-import type {HostComponent} from '../../Renderer/shims/ReactNativeTypes';
+import {type NativeComponentType} from '../../Utilities/codegenNativeComponent';
 
 import type {
   DirectEventHandler,
@@ -31,7 +28,7 @@ type NativeProps = $ReadOnly<{|
   /**
    * Whether the pull to refresh functionality is enabled.
    */
-  enabled?: WithDefault<boolean, true>,
+  enabled?: WithDefault<boolean, false>,
   /**
    * The colors (at least one) that will be used to draw the refresh indicator.
    */
@@ -68,19 +65,6 @@ type NativeProps = $ReadOnly<{|
   refreshing: boolean,
 |}>;
 
-type NativeType = HostComponent<NativeProps>;
-
-interface NativeCommands {
-  +setNativeRefreshing: (
-    viewRef: React.ElementRef<NativeType>,
-    value: boolean,
-  ) => void;
-}
-
-export const Commands: NativeCommands = codegenNativeCommands<NativeCommands>({
-  supportedCommands: ['setNativeRefreshing'],
-});
-
 export default (codegenNativeComponent<NativeProps>(
   'AndroidSwipeRefreshLayout',
-): NativeType);
+): NativeComponentType<NativeProps>);

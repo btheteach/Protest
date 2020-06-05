@@ -1,4 +1,4 @@
-/*
+/**
  * Copyright (c) Facebook, Inc. and its affiliates.
  *
  * This source code is licensed under the MIT license found in the
@@ -9,8 +9,6 @@
 
 #import <React/RCTLog.h>
 #import <jsi/JSCRuntime.h>
-
-#import<memory>
 
 namespace facebook {
 namespace react {
@@ -30,7 +28,7 @@ std::unique_ptr<JSExecutor> JSCExecutorFactory::createJSExecutor(
       runtimeInstaller(runtime);
     }
   };
-  return std::make_unique<JSIExecutor>(
+  return folly::make_unique<JSIExecutor>(
       facebook::jsc::makeJSCRuntime(),
       delegate,
       JSIExecutor::defaultTimeoutInvoker,

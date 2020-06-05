@@ -7,7 +7,6 @@
  * @flow strict-local
  * @format
  */
-
 'use strict';
 
 import NativeI18nManager from './NativeI18nManager';

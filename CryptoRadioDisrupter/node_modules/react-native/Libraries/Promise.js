@@ -27,11 +27,7 @@ if (__DEV__) {
         message = Error.prototype.toString.call(error);
         stack = error.stack;
       } else {
-        try {
-          message = require('pretty-format')(error);
-        } catch {
-          message = typeof error === 'string' ? error : JSON.stringify(error);
-        }
+        message = require('pretty-format')(error);
       }
 
       const warning =

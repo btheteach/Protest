@@ -5,16 +5,13 @@
  * LICENSE file in the root directory of this source tree.
  *
  * @format
- * @flow strict-local
+ * @flow
  */
 
 'use strict';
 
 const requireNativeComponent = require('../ReactNative/requireNativeComponent');
-import type {HostComponent} from '../Renderer/shims/ReactNativeTypes';
 
-const TextInlineImage: HostComponent<mixed> = requireNativeComponent<mixed>(
-  'RCTTextInlineImage',
-);
+const TextInlineImage: string = requireNativeComponent('RCTTextInlineImage');
 
 module.exports = TextInlineImage;

@@ -7,7 +7,6 @@
  * @flow strict
  * @format
  */
-
 'use strict';
 
 export type PackagerAsset = {
@@ -20,7 +19,6 @@ export type PackagerAsset = {
   +hash: string,
   +name: string,
   +type: string,
-  ...
 };
 
 const assets: Array<PackagerAsset> = [];

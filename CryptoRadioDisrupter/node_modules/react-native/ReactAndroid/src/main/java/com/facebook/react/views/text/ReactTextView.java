@@ -1,13 +1,10 @@
-/*
+/**
  * Copyright (c) Facebook, Inc. and its affiliates.
  *
- * This source code is licensed under the MIT license found in the
- * LICENSE file in the root directory of this source tree.
+ * <p>This source code is licensed under the MIT license found in the LICENSE file in the root
+ * directory of this source tree.
  */
-
 package com.facebook.react.views.text;
-
-import static com.facebook.react.views.text.TextAttributeProps.UNSET;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
@@ -51,7 +48,6 @@ public class ReactTextView extends AppCompatTextView implements ReactCompoundVie
   private int mTextAlign = Gravity.NO_GRAVITY;
   private int mNumberOfLines = ViewDefaults.NUMBER_OF_LINES;
   private TextUtils.TruncateAt mEllipsizeLocation = TextUtils.TruncateAt.END;
-  private boolean mAdjustsFontSizeToFit = false;
   private int mLinkifyMaskType = 0;
   private boolean mNotifyOnInlineViewLayout;
 
@@ -113,14 +109,13 @@ public class ReactTextView extends AppCompatTextView implements ReactCompoundVie
       return;
     }
 
-    ReactContext reactContext = getReactContext();
-    if (!reactContext.hasCatalystInstance()) {
+    if (!getReactContext().hasCatalystInstance()) {
       // In bridgeless mode there's no Catalyst instance; in that case, bail.
       // TODO (T45503888): Figure out how to support nested views from JS or cpp.
       return;
     }
 
-    UIManagerModule uiManager = reactContext.getNativeModule(UIManagerModule.class);
+    UIManagerModule uiManager = getReactContext().getNativeModule(UIManagerModule.class);
 
     Spanned text = (Spanned) getText();
     Layout layout = getLayout();
@@ -257,7 +252,7 @@ public class ReactTextView extends AppCompatTextView implements ReactCompoundVie
 
       WritableMap event = Arguments.createMap();
       event.putArray("inlineViews", inlineViewInfoArray2);
-      reactContext
+      getReactContext()
           .getJSModule(RCTEventEmitter.class)
           .receiveEvent(getId(), "topInlineViewLayout", event);
     }
@@ -277,25 +272,11 @@ public class ReactTextView extends AppCompatTextView implements ReactCompoundVie
       setMovementMethod(LinkMovementMethod.getInstance());
     }
     setText(spannable);
-    float paddingLeft = update.getPaddingLeft();
-    float paddingTop = update.getPaddingTop();
-    float paddingRight = update.getPaddingRight();
-    float paddingBottom = update.getPaddingBottom();
-
-    // In Fabric padding is set by the update of Layout Metrics and not as part of the "setText"
-    // operation
-    // TODO T56559197: remove this condition when we migrate 100% to Fabric
-    if (paddingLeft != UNSET
-        && paddingBottom != UNSET
-        && paddingRight != UNSET
-        && paddingBottom != UNSET) {
-
-      setPadding(
-          (int) Math.floor(paddingLeft),
-          (int) Math.floor(paddingTop),
-          (int) Math.floor(paddingRight),
-          (int) Math.floor(paddingBottom));
-    }
+    setPadding(
+        (int) Math.floor(update.getPaddingLeft()),
+        (int) Math.floor(update.getPaddingTop()),
+        (int) Math.floor(update.getPaddingRight()),
+        (int) Math.floor(update.getPaddingBottom()));
 
     int nextTextAlign = update.getTextAlign();
     if (mTextAlign != nextTextAlign) {
@@ -475,10 +456,6 @@ public class ReactTextView extends AppCompatTextView implements ReactCompoundVie
     setMaxLines(mNumberOfLines);
   }
 
-  public void setAdjustFontSizeToFit(boolean adjustsFontSizeToFit) {
-    mAdjustsFontSizeToFit = adjustsFontSizeToFit;
-  }
-
   public void setEllipsizeLocation(TextUtils.TruncateAt ellipsizeLocation) {
     mEllipsizeLocation = ellipsizeLocation;
   }
@@ -490,9 +467,7 @@ public class ReactTextView extends AppCompatTextView implements ReactCompoundVie
   public void updateView() {
     @Nullable
     TextUtils.TruncateAt ellipsizeLocation =
-        mNumberOfLines == ViewDefaults.NUMBER_OF_LINES || mAdjustsFontSizeToFit
-            ? null
-            : mEllipsizeLocation;
+        mNumberOfLines == ViewDefaults.NUMBER_OF_LINES ? null : mEllipsizeLocation;
     setEllipsize(ellipsizeLocation);
   }
 

@@ -1,10 +1,9 @@
-/*
+/**
  * Copyright (c) Facebook, Inc. and its affiliates.
  *
- * This source code is licensed under the MIT license found in the
- * LICENSE file in the root directory of this source tree.
+ * <p>This source code is licensed under the MIT license found in the LICENSE file in the root
+ * directory of this source tree.
  */
-
 package com.facebook.react.views.image;
 
 import android.graphics.Color;
@@ -39,55 +38,25 @@ public class ReactImageManager extends SimpleViewManager<ReactImageView> {
   private @Nullable AbstractDraweeControllerBuilder mDraweeControllerBuilder;
   private @Nullable GlobalImageLoadListener mGlobalImageLoadListener;
   private final @Nullable Object mCallerContext;
-  private final @Nullable ReactCallerContextFactory mCallerContextFactory;
 
-  /**
-   * @deprecated use {@link ReactImageManager#ReactImageManager(AbstractDraweeControllerBuilder,
-   *     ReactCallerContextFactory)} instead.
-   */
-  @Deprecated
   public ReactImageManager(
-      @Nullable AbstractDraweeControllerBuilder draweeControllerBuilder,
-      @Nullable Object callerContext) {
+      AbstractDraweeControllerBuilder draweeControllerBuilder, Object callerContext) {
     this(draweeControllerBuilder, null, callerContext);
   }
 
-  /**
-   * @deprecated use {@link ReactImageManager#ReactImageManager(AbstractDraweeControllerBuilder,
-   *     GlobalImageLoadListener, ReactCallerContextFactory)} instead.
-   */
-  @Deprecated
   public ReactImageManager(
-      @Nullable AbstractDraweeControllerBuilder draweeControllerBuilder,
+      AbstractDraweeControllerBuilder draweeControllerBuilder,
       @Nullable GlobalImageLoadListener globalImageLoadListener,
-      @Nullable Object callerContext) {
+      Object callerContext) {
     mDraweeControllerBuilder = draweeControllerBuilder;
     mGlobalImageLoadListener = globalImageLoadListener;
     mCallerContext = callerContext;
-    mCallerContextFactory = null;
-  }
-
-  public ReactImageManager(
-      @Nullable AbstractDraweeControllerBuilder draweeControllerBuilder,
-      @Nullable ReactCallerContextFactory callerContextFactory) {
-    this(draweeControllerBuilder, null, callerContextFactory);
-  }
-
-  public ReactImageManager(
-      @Nullable AbstractDraweeControllerBuilder draweeControllerBuilder,
-      @Nullable GlobalImageLoadListener globalImageLoadListener,
-      @Nullable ReactCallerContextFactory callerContextFactory) {
-    mDraweeControllerBuilder = draweeControllerBuilder;
-    mGlobalImageLoadListener = globalImageLoadListener;
-    mCallerContextFactory = callerContextFactory;
-    mCallerContext = null;
   }
 
   public ReactImageManager() {
     // Lazily initialize as FrescoModule have not been initialized yet
     mDraweeControllerBuilder = null;
     mCallerContext = null;
-    mCallerContextFactory = null;
   }
 
   public AbstractDraweeControllerBuilder getDraweeControllerBuilder() {
@@ -97,20 +66,14 @@ public class ReactImageManager extends SimpleViewManager<ReactImageView> {
     return mDraweeControllerBuilder;
   }
 
-  /** @deprecated use {@link ReactCallerContextFactory} instead */
-  @Deprecated
   public Object getCallerContext() {
     return mCallerContext;
   }
 
   @Override
   public ReactImageView createViewInstance(ThemedReactContext context) {
-    Object callerContext =
-        mCallerContextFactory != null
-            ? mCallerContextFactory.getOrCreateCallerContext(context)
-            : getCallerContext();
     return new ReactImageView(
-        context, getDraweeControllerBuilder(), mGlobalImageLoadListener, callerContext);
+        context, getDraweeControllerBuilder(), mGlobalImageLoadListener, getCallerContext());
   }
 
   // In JS this is Image.props.source

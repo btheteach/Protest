@@ -1,10 +1,9 @@
-/*
+/**
  * Copyright (c) Facebook, Inc. and its affiliates.
  *
- * This source code is licensed under the MIT license found in the
- * LICENSE file in the root directory of this source tree.
+ * <p>This source code is licensed under the MIT license found in the LICENSE file in the root
+ * directory of this source tree.
  */
-
 package com.facebook.react.fabric.events;
 
 import static com.facebook.react.uimanager.events.TouchesHelper.CHANGED_TOUCHES_KEY;
@@ -14,7 +13,6 @@ import static com.facebook.react.uimanager.events.TouchesHelper.TOP_TOUCH_END_KE
 import static com.facebook.react.uimanager.events.TouchesHelper.TOUCHES_KEY;
 
 import android.util.Pair;
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import com.facebook.common.logging.FLog;
 import com.facebook.react.bridge.ReadableMap;
@@ -30,16 +28,16 @@ import java.util.Set;
 
 public class FabricEventEmitter implements RCTEventEmitter {
 
-  private static final String TAG = "FabricEventEmitter";
+  private static final String TAG = FabricEventEmitter.class.getSimpleName();
 
-  @NonNull private final FabricUIManager mUIManager;
+  private final FabricUIManager mUIManager;
 
-  public FabricEventEmitter(@NonNull FabricUIManager uiManager) {
+  public FabricEventEmitter(FabricUIManager uiManager) {
     mUIManager = uiManager;
   }
 
   @Override
-  public void receiveEvent(int reactTag, @NonNull String eventName, @Nullable WritableMap params) {
+  public void receiveEvent(int reactTag, String eventName, @Nullable WritableMap params) {
     Systrace.beginSection(
         Systrace.TRACE_TAG_REACT_JAVA_BRIDGE,
         "FabricEventEmitter.receiveEvent('" + eventName + "')");
@@ -49,9 +47,7 @@ public class FabricEventEmitter implements RCTEventEmitter {
 
   @Override
   public void receiveTouches(
-      @NonNull String eventTopLevelType,
-      @NonNull WritableArray touches,
-      @NonNull WritableArray changedIndices) {
+      String eventTopLevelType, WritableArray touches, WritableArray changedIndices) {
     Pair<WritableArray, WritableArray> result =
         TOP_TOUCH_END_KEY.equalsIgnoreCase(eventTopLevelType)
                 || TOP_TOUCH_CANCEL_KEY.equalsIgnoreCase(eventTopLevelType)
@@ -82,7 +78,7 @@ public class FabricEventEmitter implements RCTEventEmitter {
   }
 
   /** TODO T31905686 optimize this to avoid copying arrays */
-  private WritableArray copyWritableArray(@NonNull WritableArray array) {
+  private WritableArray copyWritableArray(WritableArray array) {
     WritableNativeArray ret = new WritableNativeArray();
     for (int i = 0; i < array.size(); i++) {
       ret.pushMap(getWritableMap(array.getMap(i)));
@@ -104,8 +100,8 @@ public class FabricEventEmitter implements RCTEventEmitter {
    * @param indices {WritableArray} Indices to remove from `touches`.
    * @return {Array<Touch>} Subsequence of removed touch objects.
    */
-  private @NonNull Pair<WritableArray, WritableArray> removeTouchesAtIndices(
-      @NonNull WritableArray touches, @NonNull WritableArray indices) {
+  private Pair<WritableArray, WritableArray> removeTouchesAtIndices(
+      WritableArray touches, WritableArray indices) {
     WritableArray rippedOut = new WritableNativeArray();
     // use an unsafe downcast to alias to nullable elements,
     // so we can delete and then compact.
@@ -134,8 +130,8 @@ public class FabricEventEmitter implements RCTEventEmitter {
    * @param changedIndices {@link WritableArray} Indices by which to pull subsequence.
    * @return {Array<Touch>} Subsequence of touch objects.
    */
-  private @NonNull Pair<WritableArray, WritableArray> touchSubsequence(
-      @NonNull WritableArray touches, @NonNull WritableArray changedIndices) {
+  private Pair<WritableArray, WritableArray> touchSubsequence(
+      WritableArray touches, WritableArray changedIndices) {
     WritableArray result = new WritableNativeArray();
     for (int i = 0; i < changedIndices.size(); i++) {
       result.pushMap(getWritableMap(touches.getMap(changedIndices.getInt(i))));
@@ -149,7 +145,7 @@ public class FabricEventEmitter implements RCTEventEmitter {
    *
    * @param readableMap {@link ReadableMap} source map
    */
-  private @NonNull WritableMap getWritableMap(@NonNull ReadableMap readableMap) {
+  private WritableMap getWritableMap(ReadableMap readableMap) {
     WritableNativeMap map = new WritableNativeMap();
     map.merge(readableMap);
     return map;

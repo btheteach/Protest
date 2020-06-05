@@ -1,4 +1,4 @@
-/*
+/**
  * Copyright (c) Facebook, Inc. and its affiliates.
  *
  * This source code is licensed under the MIT license found in the
@@ -20,9 +20,7 @@ namespace react {
  */
 class RuntimeEventBeat : public EventBeat {
  public:
-  RuntimeEventBeat(
-      EventBeat::SharedOwnerBox const &ownerBox,
-      RuntimeExecutor runtimeExecutor);
+  RuntimeEventBeat(RuntimeExecutor runtimeExecutor);
   ~RuntimeEventBeat();
 
   void induce() const override;

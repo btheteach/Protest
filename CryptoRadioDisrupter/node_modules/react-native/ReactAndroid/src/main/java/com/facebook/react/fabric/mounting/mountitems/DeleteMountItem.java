@@ -1,13 +1,11 @@
-/*
- * Copyright (c) Facebook, Inc. and its affiliates.
+/**
+ * Copyright (c) 2014-present, Facebook, Inc.
  *
- * This source code is licensed under the MIT license found in the
- * LICENSE file in the root directory of this source tree.
+ * <p>This source code is licensed under the MIT license found in the LICENSE file in the root
+ * directory of this source tree.
  */
-
 package com.facebook.react.fabric.mounting.mountitems;
 
-import androidx.annotation.NonNull;
 import com.facebook.react.fabric.mounting.MountingManager;
 
 public class DeleteMountItem implements MountItem {
@@ -19,7 +17,7 @@ public class DeleteMountItem implements MountItem {
   }
 
   @Override
-  public void execute(@NonNull MountingManager mountingManager) {
+  public void execute(MountingManager mountingManager) {
     mountingManager.deleteView(mReactTag);
   }
 

@@ -5,27 +5,27 @@
  * LICENSE file in the root directory of this source tree.
  *
  * @format
- * @flow strict-local
+ * @flow
  */
 
 'use strict';
 
 import type {
+  Float,
   BubblingEventHandler,
   DirectEventHandler,
-  Double,
   WithDefault,
 } from '../../Types/CodegenTypes';
 
 import codegenNativeComponent from '../../Utilities/codegenNativeComponent';
-import type {HostComponent} from '../../Renderer/shims/ReactNativeTypes';
+import {type NativeComponentType} from '../../Utilities/codegenNativeComponent';
 
 import type {ColorValue} from '../../StyleSheet/StyleSheetTypes';
 import type {ImageSource} from '../../Image/ImageSource';
 import type {ViewProps} from '../View/ViewPropTypes';
 
 type Event = $ReadOnly<{|
-  value: Double,
+  value: Float,
   fromUser?: boolean,
 |}>;
 
@@ -34,19 +34,19 @@ type NativeProps = $ReadOnly<{|
 
   // Props
   disabled?: WithDefault<boolean, false>,
-  enabled?: WithDefault<boolean, true>,
+  enabled?: WithDefault<boolean, false>,
   maximumTrackImage?: ?ImageSource,
   maximumTrackTintColor?: ?ColorValue,
-  maximumValue?: WithDefault<Double, 1>,
+  maximumValue?: WithDefault<Float, 1>,
   minimumTrackImage?: ?ImageSource,
   minimumTrackTintColor?: ?ColorValue,
-  minimumValue?: WithDefault<Double, 0>,
-  step?: WithDefault<Double, 0>,
+  minimumValue?: WithDefault<Float, 0>,
+  step?: WithDefault<Float, 0>,
   testID?: WithDefault<string, ''>,
   thumbImage?: ?ImageSource,
   thumbTintColor?: ?ColorValue,
   trackImage?: ?ImageSource,
-  value?: WithDefault<Double, 0>,
+  value?: WithDefault<Float, 0>,
 
   // Events
   onChange?: ?BubblingEventHandler<Event>,
@@ -57,4 +57,4 @@ type NativeProps = $ReadOnly<{|
 export default (codegenNativeComponent<NativeProps>('Slider', {
   interfaceOnly: true,
   paperComponentName: 'RCTSlider',
-}): HostComponent<NativeProps>);
+}): NativeComponentType<NativeProps>);

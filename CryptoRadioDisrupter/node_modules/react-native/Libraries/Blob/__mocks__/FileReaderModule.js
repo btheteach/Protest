@@ -7,7 +7,6 @@
  * @flow strict
  * @format
  */
-
 const FileReaderModule = {
   async readAsText(): Promise<string> {
     return '';

@@ -1,14 +1,12 @@
-/*
+/**
  * Copyright (c) Facebook, Inc. and its affiliates.
  *
- * This source code is licensed under the MIT license found in the
- * LICENSE file in the root directory of this source tree.
+ * <p>This source code is licensed under the MIT license found in the LICENSE file in the root
+ * directory of this source tree.
  */
-
 package com.facebook.react.views.picker;
 
 import android.widget.Spinner;
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.uimanager.SimpleViewManager;
@@ -65,18 +63,6 @@ public abstract class ReactPickerManager extends SimpleViewManager<ReactPicker> 
     picker.setOnSelectListener(
         new PickerEventEmitter(
             picker, reactContext.getNativeModule(UIManagerModule.class).getEventDispatcher()));
-  }
-
-  @Override
-  public void receiveCommand(
-      @NonNull ReactPicker view, String commandId, @Nullable ReadableArray args) {
-    switch (commandId) {
-      case "setNativeSelectedPosition":
-        if (args != null) {
-          view.setImmediateSelection(args.getInt(0));
-          break;
-        }
-    }
   }
 
   private static class PickerEventEmitter implements ReactPicker.OnSelectListener {

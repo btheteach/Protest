@@ -29,7 +29,4 @@ rn_android_library(
         react_native_target("java/com/facebook/react/modules/network:network"),
         react_native_target("java/com/facebook/react/modules/websocket:websocket"),
     ],
-    exported_deps = [
-        react_native_target("java/com/facebook/fbreact/specs:FBReactNativeSpec"),
-    ],
 )

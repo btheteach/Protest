@@ -5,7 +5,7 @@
  * LICENSE file in the root directory of this source tree.
  *
  * @format
- * @flow strict-local
+ * @flow
  */
 
 'use strict';
@@ -13,6 +13,7 @@
 const Platform = require('../../Utilities/Platform');
 import SliderNativeComponent from './SliderNativeComponent';
 const React = require('react');
+const ReactNative = require('../../Renderer/shims/ReactNative');
 const StyleSheet = require('../../StyleSheet/StyleSheet');
 
 import type {ImageSource} from '../../Image/ImageSource';
@@ -203,16 +204,7 @@ const Slider = (
     props.style,
   );
 
-  const {
-    disabled = false,
-    value = 0.5,
-    minimumValue = 0,
-    maximumValue = 1,
-    step = 0,
-    onValueChange,
-    onSlidingComplete,
-    ...localProps
-  } = props;
+  const {onValueChange, onSlidingComplete, ...localProps} = props;
 
   const onValueChangeEvent = onValueChange
     ? (event: Event) => {
@@ -237,28 +229,30 @@ const Slider = (
   return (
     <SliderNativeComponent
       {...localProps}
-      // TODO: Reconcile these across the two platforms.
-      enabled={!disabled}
-      disabled={disabled}
-      maximumValue={maximumValue}
-      minimumValue={minimumValue}
-      onChange={onChangeEvent}
-      onResponderTerminationRequest={() => false}
-      onSlidingComplete={onSlidingCompleteEvent}
-      onStartShouldSetResponder={() => true}
-      onValueChange={onValueChangeEvent}
       ref={forwardedRef}
-      step={step}
       style={style}
-      value={value}
+      onChange={onChangeEvent}
+      onSlidingComplete={onSlidingCompleteEvent}
+      onValueChange={onValueChangeEvent}
+      enabled={!props.disabled}
+      onStartShouldSetResponder={() => true}
+      onResponderTerminationRequest={() => false}
     />
   );
 };
 
-const SliderWithRef: React.AbstractComponent<
-  Props,
-  React.ElementRef<typeof SliderNativeComponent>,
-> = React.forwardRef(Slider);
+const SliderWithRef = React.forwardRef(Slider);
+
+/* $FlowFixMe(>=0.89.0 site=react_native_fb) This comment suppresses an error
+ * found when Flow v0.89 was deployed. To see the error, delete this comment
+ * and run Flow. */
+SliderWithRef.defaultProps = {
+  disabled: false,
+  value: 0,
+  minimumValue: 0,
+  maximumValue: 1,
+  step: 0,
+};
 
 let styles;
 if (Platform.OS === 'ios') {
@@ -273,4 +267,7 @@ if (Platform.OS === 'ios') {
   });
 }
 
-module.exports = SliderWithRef;
+/* $FlowFixMe(>=0.89.0 site=react_native_fb) This comment suppresses an error
+ * found when Flow v0.89 was deployed. To see the error, delete this comment
+ * and run Flow. */
+module.exports = (SliderWithRef: Class<ReactNative.NativeComponent<Props>>);

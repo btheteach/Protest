@@ -23,7 +23,6 @@
  *     return <Row>{elems.map(elem => <Elem>{elem}</Elem>)}</Row>;
  *   })
  */
-
 'use strict';
 
 function groupByEveryN<T>(array: Array<T>, n: number): Array<Array<?T>> {

@@ -41,4 +41,15 @@ module.exports = {
     'timer',
     'toolbar',
   ],
+  // This must be kept in sync with the AccessibilityStatesMask in RCTViewManager.m
+  DeprecatedAccessibilityStates: [
+    'selected',
+    'disabled',
+    'checked',
+    'unchecked',
+    'busy',
+    'expanded',
+    'collapsed',
+    'hasPopup',
+  ],
 };

@@ -20,7 +20,6 @@ function defineLazyObjectProperty<T>(
     get: () => T,
     enumerable?: boolean,
     writable?: boolean,
-    ...
   },
 ): void {
   const {get} = descriptor;

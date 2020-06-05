@@ -1,17 +1,14 @@
-/*
- * Copyright (c) Facebook, Inc. and its affiliates.
- *
- * This source code is licensed under the MIT license found in the
- * LICENSE file in the root directory of this source tree.
- */
+// Copyright 2004-present Facebook. All Rights Reserved.
+// This source code is licensed under the MIT license found in the
+// LICENSE file in the root directory of this source tree.
 
 #pragma once
 
-#include <fbjni/fbjni.h>
+#include <fb/fbjni.h>
 #include <jsi/jsi.h>
 #include <react/uimanager/ComponentDescriptorRegistry.h>
-#include <react/uimanager/Scheduler.h>
 #include <react/utils/ContextContainer.h>
+#include <react/uimanager/Scheduler.h>
 #include <mutex>
 #include <unordered_set>
 
@@ -25,7 +22,7 @@ class Instance;
 class ComponentFactoryDelegate
     : public jni::HybridClass<ComponentFactoryDelegate> {
  public:
-  constexpr static const char *const kJavaDescriptor =
+  constexpr static const char* const kJavaDescriptor =
       "Lcom/facebook/react/fabric/ComponentFactoryDelegate;";
 
   static void registerNatives();

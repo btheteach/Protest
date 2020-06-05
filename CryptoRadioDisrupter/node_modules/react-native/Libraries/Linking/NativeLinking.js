@@ -4,7 +4,7 @@
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
  *
- * @flow strict-local
+ * @flow
  * @format
  */
 
@@ -24,11 +24,7 @@ export interface Spec extends TurboModule {
   // Android only
   +sendIntent: (
     action: string,
-    extras: ?Array<{
-      key: string,
-      value: string | number | boolean,
-      ...
-    }>,
+    extras: ?Array<{key: string, value: string | number | boolean}>,
   ) => Promise<void>;
 
   // Events

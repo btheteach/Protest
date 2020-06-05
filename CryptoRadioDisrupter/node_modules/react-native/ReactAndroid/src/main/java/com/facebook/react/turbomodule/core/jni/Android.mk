@@ -15,15 +15,15 @@ LOCAL_EXPORT_C_INCLUDES := $(LOCAL_PATH)
 
 LOCAL_CFLAGS += -fexceptions -frtti -std=c++14 -Wall
 
-LOCAL_STATIC_LIBRARIES = libcallinvoker
+LOCAL_STATIC_LIBRARIES = libjscallinvoker
 
-LOCAL_SHARED_LIBRARIES = libfb libfbjni
+LOCAL_SHARED_LIBRARIES = libfb
 
 # Name of this module.
-LOCAL_MODULE := callinvokerholder
+LOCAL_MODULE := jscallinvokerholder
 
 # Compile all local c++ files
-LOCAL_SRC_FILES := $(LOCAL_PATH)/ReactCommon/CallInvokerHolder.cpp
+LOCAL_SRC_FILES := $(LOCAL_PATH)/ReactCommon/JSCallInvokerHolder.cpp
 
 # Build the files in this directory as a shared library
 include $(BUILD_STATIC_LIBRARY)

@@ -1,10 +1,9 @@
-/*
+/**
  * Copyright (c) Facebook, Inc. and its affiliates.
  *
- * This source code is licensed under the MIT license found in the
- * LICENSE file in the root directory of this source tree.
+ * <p>This source code is licensed under the MIT license found in the LICENSE file in the root
+ * directory of this source tree.
  */
-
 package com.facebook.react.uimanager;
 
 import android.content.Context;
@@ -81,6 +80,7 @@ public abstract class ViewManager<T extends View, C extends ReactShadowNode>
       @Nullable StateWrapper stateWrapper,
       JSResponderHandler jsResponderHandler) {
     T view = createViewInstance(reactContext, props, stateWrapper);
+    addEventEmitters(reactContext, view);
     if (view instanceof ReactInterceptingViewGroup) {
       ((ReactInterceptingViewGroup) view).setOnInterceptTouchEventListener(jsResponderHandler);
     }
@@ -137,7 +137,6 @@ public abstract class ViewManager<T extends View, C extends ReactShadowNode>
       @Nullable ReactStylesDiffMap initialProps,
       @Nullable StateWrapper stateWrapper) {
     T view = createViewInstance(reactContext);
-    addEventEmitters(reactContext, view);
     if (initialProps != null) {
       updateProperties(view, initialProps);
     }
@@ -283,7 +282,7 @@ public abstract class ViewManager<T extends View, C extends ReactShadowNode>
    * this component type.
    */
   public @Nullable Object updateState(
-      @NonNull T view, ReactStylesDiffMap props, @Nullable StateWrapper stateWrapper) {
+      @NonNull T view, ReactStylesDiffMap props, StateWrapper stateWrapper) {
     return null;
   }
 
@@ -298,10 +297,4 @@ public abstract class ViewManager<T extends View, C extends ReactShadowNode>
       YogaMeasureMode heightMode) {
     return 0;
   }
-
-  /**
-   * Subclasses can override this method to set padding for the given View in Fabric. Since not all
-   * components support setting padding, the default implementation of this method does nothing.
-   */
-  public void setPadding(T view, int left, int top, int right, int bottom) {}
 }

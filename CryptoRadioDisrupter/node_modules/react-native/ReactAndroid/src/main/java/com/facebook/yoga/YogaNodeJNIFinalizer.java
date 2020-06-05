@@ -1,10 +1,9 @@
-/*
+/**
  * Copyright (c) Facebook, Inc. and its affiliates.
  *
- * This source code is licensed under the MIT license found in the
- * LICENSE file in the root directory of this source tree.
+ * This source code is licensed under the MIT license found in the LICENSE
+ * file in the root directory of this source tree.
  */
-
 package com.facebook.yoga;
 
 public class YogaNodeJNIFinalizer extends YogaNodeJNIBase {
@@ -29,7 +28,7 @@ public class YogaNodeJNIFinalizer extends YogaNodeJNIBase {
     if (mNativePointer != 0) {
       long nativePointer = mNativePointer;
       mNativePointer = 0;
-      YogaNative.jni_YGNodeFreeJNI(nativePointer);
+      YogaNative.jni_YGNodeFree(nativePointer);
     }
   }
 }

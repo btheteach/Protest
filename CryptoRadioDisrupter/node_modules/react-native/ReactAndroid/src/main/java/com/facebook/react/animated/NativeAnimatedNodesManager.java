@@ -1,10 +1,9 @@
-/*
+/**
  * Copyright (c) Facebook, Inc. and its affiliates.
  *
- * This source code is licensed under the MIT license found in the
- * LICENSE file in the root directory of this source tree.
+ * <p>This source code is licensed under the MIT license found in the LICENSE file in the root
+ * directory of this source tree.
  */
-
 package com.facebook.react.animated;
 
 import android.util.SparseArray;
@@ -318,7 +317,7 @@ import java.util.Queue;
     propsAnimatedNode.disconnectFromView(viewTag);
   }
 
-  public void restoreDefaultValues(int animatedNodeTag) {
+  public void restoreDefaultValues(int animatedNodeTag, int viewTag) {
     AnimatedNode node = mAnimatedNodes.get(animatedNodeTag);
     // Restoring default values needs to happen before UIManager operations so it is
     // possible the node hasn't been created yet if it is being connected and

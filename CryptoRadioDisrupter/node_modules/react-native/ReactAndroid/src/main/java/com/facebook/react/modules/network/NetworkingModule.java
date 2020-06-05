@@ -1,10 +1,9 @@
-/*
+/**
  * Copyright (c) Facebook, Inc. and its affiliates.
  *
- * This source code is licensed under the MIT license found in the
- * LICENSE file in the root directory of this source tree.
+ * <p>This source code is licensed under the MIT license found in the LICENSE file in the root
+ * directory of this source tree.
  */
-
 package com.facebook.react.modules.network;
 
 import android.net.Uri;
@@ -12,10 +11,10 @@ import android.os.Bundle;
 import android.util.Base64;
 import androidx.annotation.Nullable;
 import com.facebook.common.logging.FLog;
-import com.facebook.fbreact.specs.NativeNetworkingAndroidSpec;
 import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.GuardedAsyncTask;
 import com.facebook.react.bridge.ReactApplicationContext;
+import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableMap;
@@ -51,7 +50,7 @@ import okio.Okio;
 
 /** Implements the XMLHttpRequest JavaScript interface. */
 @ReactModule(name = NetworkingModule.NAME)
-public final class NetworkingModule extends NativeNetworkingAndroidSpec {
+public final class NetworkingModule extends ReactContextBaseJavaModule {
 
   /**
    * Allows to implement a custom fetching process for specific URIs. It is the handler's job to
@@ -226,19 +225,17 @@ public final class NetworkingModule extends NativeNetworkingAndroidSpec {
     mResponseHandlers.remove(handler);
   }
 
-  @Override
+  @ReactMethod
   public void sendRequest(
       String method,
       String url,
-      double requestIdAsDouble,
+      final int requestId,
       ReadableArray headers,
       ReadableMap data,
-      String responseType,
-      boolean useIncrementalUpdates,
-      double timeoutAsDouble,
+      final String responseType,
+      final boolean useIncrementalUpdates,
+      int timeout,
       boolean withCredentials) {
-    int requestId = (int) requestIdAsDouble;
-    int timeout = (int) timeoutAsDouble;
     try {
       sendRequestInternal(
           method,
@@ -252,10 +249,7 @@ public final class NetworkingModule extends NativeNetworkingAndroidSpec {
           withCredentials);
     } catch (Throwable th) {
       FLog.e(TAG, "Failed to send url request: " + url, th);
-      final RCTDeviceEventEmitter eventEmitter = getEventEmitter("sendRequest error");
-      if (eventEmitter != null) {
-        ResponseUtil.onRequestError(eventEmitter, requestId, th.getMessage(), th);
-      }
+      ResponseUtil.onRequestError(getEventEmitter(), requestId, th.getMessage(), th);
     }
   }
 
@@ -270,7 +264,7 @@ public final class NetworkingModule extends NativeNetworkingAndroidSpec {
       final boolean useIncrementalUpdates,
       int timeout,
       boolean withCredentials) {
-    final RCTDeviceEventEmitter eventEmitter = getEventEmitter("sendRequestInternal");
+    final RCTDeviceEventEmitter eventEmitter = getEventEmitter();
 
     try {
       Uri uri = Uri.parse(url);
@@ -646,9 +640,8 @@ public final class NetworkingModule extends NativeNetworkingAndroidSpec {
     return Arguments.fromBundle(responseHeaders);
   }
 
-  @Override
-  public void abortRequest(double requestIdAsDouble) {
-    int requestId = (int) requestIdAsDouble;
+  @ReactMethod
+  public void abortRequest(final int requestId) {
     cancelRequest(requestId);
     removeRequest(requestId);
   }
@@ -669,15 +662,9 @@ public final class NetworkingModule extends NativeNetworkingAndroidSpec {
     mCookieHandler.clearCookies(callback);
   }
 
-  @Override
-  public void addListener(String eventName) {}
-
-  @Override
-  public void removeListeners(double count) {}
-
   private @Nullable MultipartBody.Builder constructMultipartBody(
       ReadableArray body, String contentType, int requestId) {
-    RCTDeviceEventEmitter eventEmitter = getEventEmitter("constructMultipartBody");
+    RCTDeviceEventEmitter eventEmitter = getEventEmitter();
     MultipartBody.Builder multipartBuilder = new MultipartBody.Builder();
     multipartBuilder.setType(MediaType.parse(contentType));
 
@@ -763,13 +750,7 @@ public final class NetworkingModule extends NativeNetworkingAndroidSpec {
     return headersBuilder.build();
   }
 
-  private RCTDeviceEventEmitter getEventEmitter(String reason) {
-    ReactApplicationContext reactApplicationContext = getReactApplicationContextIfActiveOrWarn();
-
-    if (reactApplicationContext != null) {
-      return getReactApplicationContext().getJSModule(RCTDeviceEventEmitter.class);
-    }
-
-    return null;
+  private RCTDeviceEventEmitter getEventEmitter() {
+    return getReactApplicationContext().getJSModule(RCTDeviceEventEmitter.class);
   }
 }

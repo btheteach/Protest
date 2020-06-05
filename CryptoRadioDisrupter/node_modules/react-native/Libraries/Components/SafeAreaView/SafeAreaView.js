@@ -4,7 +4,7 @@
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
  *
- * @flow strict-local
+ * @flow
  * @format
  */
 
@@ -12,7 +12,7 @@ const Platform = require('../../Utilities/Platform');
 const React = require('react');
 const View = require('../View/View');
 
-import type {HostComponent} from '../../Renderer/shims/ReactNativeTypes';
+import type {NativeComponent} from '../../Renderer/shims/ReactNative';
 import type {ViewProps} from '../View/ViewPropTypes';
 
 type Props = $ReadOnly<{|
@@ -20,10 +20,7 @@ type Props = $ReadOnly<{|
   emulateUnlessSupported?: boolean,
 |}>;
 
-let exported: React.AbstractComponent<
-  Props,
-  React.ElementRef<HostComponent<mixed>>,
->;
+let exported: Class<React$Component<Props>> | Class<NativeComponent<Props>>;
 
 /**
  * Renders nested content and automatically applies paddings reflect the portion
@@ -35,27 +32,37 @@ let exported: React.AbstractComponent<
  * sensor housing area on iPhone X).
  */
 if (Platform.OS === 'android') {
-  exported = React.forwardRef<Props, React.ElementRef<HostComponent<mixed>>>(
-    function SafeAreaView(props, forwardedRef) {
-      const {emulateUnlessSupported, ...localProps} = props;
-      return <View {...localProps} ref={forwardedRef} />;
-    },
-  );
+  const SafeAreaView = (
+    props: Props,
+    forwardedRef?: ?React.Ref<typeof View>,
+  ) => {
+    const {emulateUnlessSupported, ...localProps} = props;
+    return <View {...localProps} ref={forwardedRef} />;
+  };
+
+  const SafeAreaViewRef = React.forwardRef(SafeAreaView);
+  SafeAreaViewRef.displayName = 'SafeAreaView';
+  exported = ((SafeAreaViewRef: any): Class<React.Component<Props>>);
 } else {
   const RCTSafeAreaViewNativeComponent = require('./RCTSafeAreaViewNativeComponent')
     .default;
 
-  exported = React.forwardRef<Props, React.ElementRef<HostComponent<mixed>>>(
-    function SafeAreaView(props, forwardedRef) {
-      return (
-        <RCTSafeAreaViewNativeComponent
-          emulateUnlessSupported={true}
-          {...props}
-          ref={forwardedRef}
-        />
-      );
-    },
-  );
+  const SafeAreaView = (
+    props: Props,
+    forwardedRef?: ?React.Ref<typeof RCTSafeAreaViewNativeComponent>,
+  ) => {
+    return (
+      <RCTSafeAreaViewNativeComponent
+        emulateUnlessSupported={true}
+        {...props}
+        ref={forwardedRef}
+      />
+    );
+  };
+
+  const SafeAreaViewRef = React.forwardRef(SafeAreaView);
+  SafeAreaViewRef.displayName = 'SafeAreaView';
+  exported = ((SafeAreaViewRef: any): Class<NativeComponent<Props>>);
 }
 
 module.exports = exported;

@@ -1,4 +1,4 @@
-/*
+/**
  * Copyright (c) Facebook, Inc. and its affiliates.
  *
  * This source code is licensed under the MIT license found in the
@@ -113,5 +113,4 @@
  * protocol. This method should be called in bridgeDidInitializeModule.
  */
 - (void)setImageCache:(id<RCTImageCache>)cache;
-
 @end

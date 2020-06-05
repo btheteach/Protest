@@ -1,4 +1,4 @@
-/*
+/**
  * Copyright (c) Facebook, Inc. and its affiliates.
  *
  * This source code is licensed under the MIT license found in the
@@ -166,14 +166,9 @@ NSString *RCTFormatError(NSString *message, NSArray<NSDictionary<NSString *, id>
     message = [[message substringToIndex:maxMessageLength] stringByAppendingString:@"..."];
   }
 
-  NSString *prettyStack = RCTFormatStackTrace(stackTrace);
-
-  return [NSString stringWithFormat:@"%@%@%@", message, prettyStack ? @", stack:\n" : @"", prettyStack ? prettyStack : @""];
-}
-
-NSString *RCTFormatStackTrace(NSArray<NSDictionary<NSString *, id> *> *stackTrace) {
+  NSMutableString *prettyStack = [NSMutableString string];
   if (stackTrace) {
-    NSMutableString *prettyStack = [NSMutableString string];
+    [prettyStack appendString:@", stack:\n"];
 
     NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:@"\\b((?:seg-\\d+(?:_\\d+)?|\\d+)\\.js)"
                                                                            options:NSRegularExpressionCaseInsensitive
@@ -189,10 +184,9 @@ NSString *RCTFormatStackTrace(NSArray<NSDictionary<NSString *, id> *> *stackTrac
 
       [prettyStack appendFormat:@"%@@%@%@:%@\n", frame[@"methodName"], fileName, frame[@"lineNumber"], frame[@"column"]];
     }
-
-    return prettyStack;
   }
-  return nil;
+
+  return [NSString stringWithFormat:@"%@%@", message, prettyStack];
 }
 
 void RCTFatalException(NSException *exception)
@@ -222,3 +216,4 @@ RCTFatalExceptionHandler RCTGetFatalExceptionHandler(void)
 {
   return RCTCurrentFatalExceptionHandler;
 }
+

@@ -1,10 +1,9 @@
-/*
+/**
  * Copyright (c) Facebook, Inc. and its affiliates.
  *
- * This source code is licensed under the MIT license found in the
- * LICENSE file in the root directory of this source tree.
+ * <p>This source code is licensed under the MIT license found in the LICENSE file in the root
+ * directory of this source tree.
  */
-
 package com.facebook.react.views.picker;
 
 import android.content.Context;
@@ -121,15 +120,6 @@ public class ReactPicker extends AppCompatSpinner {
    */
   /* package */ void setStagedSelection(int selection) {
     mStagedSelection = selection;
-  }
-
-  /** Will set the "selection" value immediately as opposed to {@link #setStagedSelection(int)} */
-  /* package */ void setImmediateSelection(int selection) {
-    if (selection != getSelectedItemPosition()) {
-      setOnItemSelectedListener(null);
-      setSelection(selection, false);
-      setOnItemSelectedListener(mItemSelectedListener);
-    }
   }
 
   /* package */ void setStagedPrimaryTextColor(@Nullable Integer primaryColor) {

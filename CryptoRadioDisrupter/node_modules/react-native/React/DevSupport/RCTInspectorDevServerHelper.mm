@@ -1,16 +1,14 @@
-/*
- * Copyright (c) Facebook, Inc. and its affiliates.
- *
- * This source code is licensed under the MIT license found in the
- * LICENSE file in the root directory of this source tree.
- */
+// Copyright (c) Facebook, Inc. and its affiliates.
+//
+// This source code is licensed under the MIT license found in the
+// LICENSE file in the root directory of this source tree.
 
 #import <React/RCTInspectorDevServerHelper.h>
 
-#if RCT_DEV
+#if RCT_DEV && !TARGET_OS_UIKITFORMAC
 
-#import <React/RCTLog.h>
 #import <UIKit/UIKit.h>
+#import <React/RCTLog.h>
 
 #import <React/RCTDefines.h>
 #import <React/RCTInspectorPackagerConnection.h>
@@ -39,14 +37,12 @@ static NSURL *getInspectorDeviceUrl(NSURL *bundleURL)
   if (inspectorProxyPortStr && [inspectorProxyPortStr length] > 0) {
     inspectorProxyPort = [NSNumber numberWithInt:[inspectorProxyPortStr intValue]];
   }
-  NSString *escapedDeviceName = [[[UIDevice currentDevice] name]
-      stringByAddingPercentEncodingWithAllowedCharacters:NSCharacterSet.URLQueryAllowedCharacterSet];
-  NSString *escapedAppName = [[[NSBundle mainBundle] bundleIdentifier]
-      stringByAddingPercentEncodingWithAllowedCharacters:NSCharacterSet.URLQueryAllowedCharacterSet];
+  NSString *escapedDeviceName = [[[UIDevice currentDevice] name] stringByAddingPercentEncodingWithAllowedCharacters:NSCharacterSet.URLQueryAllowedCharacterSet];
+  NSString *escapedAppName = [[[NSBundle mainBundle] bundleIdentifier] stringByAddingPercentEncodingWithAllowedCharacters:NSCharacterSet.URLQueryAllowedCharacterSet];
   return [NSURL URLWithString:[NSString stringWithFormat:@"http://%@/inspector/device?name=%@&app=%@",
-                                                         getServerHost(bundleURL, inspectorProxyPort),
-                                                         escapedDeviceName,
-                                                         escapedAppName]];
+                                                        getServerHost(bundleURL, inspectorProxyPort),
+                                                        escapedDeviceName,
+                                                        escapedAppName]];
 }
 
 static NSURL *getAttachDeviceUrl(NSURL *bundleURL, NSString *title)
@@ -56,20 +52,18 @@ static NSURL *getAttachDeviceUrl(NSURL *bundleURL, NSString *title)
   if (metroBundlerPortStr && [metroBundlerPortStr length] > 0) {
     metroBundlerPort = [NSNumber numberWithInt:[metroBundlerPortStr intValue]];
   }
-  NSString *escapedDeviceName = [[[UIDevice currentDevice] name]
-      stringByAddingPercentEncodingWithAllowedCharacters:NSCharacterSet.URLHostAllowedCharacterSet];
-  NSString *escapedAppName = [[[NSBundle mainBundle] bundleIdentifier]
-      stringByAddingPercentEncodingWithAllowedCharacters:NSCharacterSet.URLHostAllowedCharacterSet];
+  NSString *escapedDeviceName = [[[UIDevice currentDevice] name] stringByAddingPercentEncodingWithAllowedCharacters:NSCharacterSet.URLHostAllowedCharacterSet];
+  NSString *escapedAppName = [[[NSBundle mainBundle] bundleIdentifier] stringByAddingPercentEncodingWithAllowedCharacters:NSCharacterSet.URLHostAllowedCharacterSet];
   return [NSURL URLWithString:[NSString stringWithFormat:@"http://%@/attach-debugger-nuclide?title=%@&device=%@&app=%@",
-                                                         getServerHost(bundleURL, metroBundlerPort),
-                                                         title,
-                                                         escapedDeviceName,
-                                                         escapedAppName]];
+                               getServerHost(bundleURL, metroBundlerPort),
+                               title,
+                               escapedDeviceName,
+                               escapedAppName]];
 }
 
 @implementation RCTInspectorDevServerHelper
 
-RCT_NOT_IMPLEMENTED(-(instancetype)init)
+RCT_NOT_IMPLEMENTED(- (instancetype)init)
 
 static NSMutableDictionary<NSString *, RCTInspectorPackagerConnection *> *socketConnections = nil;
 
@@ -80,18 +74,23 @@ static void sendEventToAllConnections(NSString *event)
   }
 }
 
-static void displayErrorAlert(UIViewController *view, NSString *message)
-{
-  UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil
-                                                                 message:message
-                                                          preferredStyle:UIAlertControllerStyleAlert];
+static void displayErrorAlert(UIViewController *view, NSString *message) {
+  UIAlertController *alert =
+      [UIAlertController alertControllerWithTitle:nil
+                                          message:message
+                                   preferredStyle:UIAlertControllerStyleAlert];
   [view presentViewController:alert animated:YES completion:nil];
-  dispatch_after(dispatch_time(DISPATCH_TIME_NOW, NSEC_PER_SEC * 2.5), dispatch_get_main_queue(), ^{
-    [alert dismissViewControllerAnimated:YES completion:nil];
-  });
+  dispatch_after(
+      dispatch_time(DISPATCH_TIME_NOW, NSEC_PER_SEC * 2.5),
+      dispatch_get_main_queue(),
+      ^{
+        [alert dismissViewControllerAnimated:YES completion:nil];
+      });
 }
 
-+ (void)attachDebugger:(NSString *)owner withBundleURL:(NSURL *)bundleURL withView:(UIViewController *)view
++ (void)attachDebugger:(NSString *)owner
+         withBundleURL:(NSURL *)bundleURL
+              withView:(UIViewController *)view
 {
   NSURL *url = getAttachDeviceUrl(bundleURL, owner);
 
@@ -99,15 +98,15 @@ static void displayErrorAlert(UIViewController *view, NSString *message)
   [request setHTTPMethod:@"GET"];
 
   __weak UIViewController *viewCapture = view;
-  [[[NSURLSession sharedSession]
-      dataTaskWithRequest:request
-        completionHandler:^(
-            __unused NSData *_Nullable data, __unused NSURLResponse *_Nullable response, NSError *_Nullable error) {
-          UIViewController *viewCaptureStrong = viewCapture;
-          if (error != nullptr && viewCaptureStrong != nullptr) {
-            displayErrorAlert(viewCaptureStrong, @"The request to attach Nuclide couldn't reach Metro!");
-          }
-        }] resume];
+  [[[NSURLSession sharedSession] dataTaskWithRequest:request completionHandler:
+    ^(__unused NSData *_Nullable data,
+      __unused NSURLResponse *_Nullable response,
+      NSError *_Nullable error) {
+      UIViewController *viewCaptureStrong = viewCapture;
+      if (error != nullptr && viewCaptureStrong != nullptr) {
+        displayErrorAlert(viewCaptureStrong, @"The request to attach Nuclide couldn't reach Metro Bundler!");
+      }
+    }] resume];
 }
 
 + (void)disableDebugger
@@ -128,7 +127,7 @@ static void displayErrorAlert(UIViewController *view, NSString *message)
 
   NSString *key = [inspectorURL absoluteString];
   RCTInspectorPackagerConnection *connection = socketConnections[key];
-  if (!connection || !connection.isConnected) {
+  if (!connection) {
     connection = [[RCTInspectorPackagerConnection alloc] initWithURL:inspectorURL];
     socketConnections[key] = connection;
     [connection connect];

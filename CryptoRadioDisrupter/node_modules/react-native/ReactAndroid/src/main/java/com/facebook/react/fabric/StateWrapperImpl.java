@@ -1,14 +1,12 @@
-/*
- * Copyright (c) Facebook, Inc. and its affiliates.
+/**
+ * Copyright (c) 2014-present, Facebook, Inc.
  *
- * This source code is licensed under the MIT license found in the
- * LICENSE file in the root directory of this source tree.
+ * <p>This source code is licensed under the MIT license found in the LICENSE file in the root
+ * directory of this source tree.
  */
-
 package com.facebook.react.fabric;
 
 import android.annotation.SuppressLint;
-import androidx.annotation.NonNull;
 import com.facebook.jni.HybridData;
 import com.facebook.proguard.annotations.DoNotStrip;
 import com.facebook.react.bridge.NativeMap;
@@ -37,10 +35,10 @@ public class StateWrapperImpl implements StateWrapper {
   @Override
   public native ReadableNativeMap getState();
 
-  public native void updateStateImpl(@NonNull NativeMap map);
+  public native void updateStateImpl(NativeMap map);
 
   @Override
-  public void updateState(@NonNull WritableMap map) {
+  public void updateState(WritableMap map) {
     updateStateImpl((NativeMap) map);
   }
 }

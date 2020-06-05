@@ -20,7 +20,8 @@ export interface Spec extends TurboModule {
       +title?: ?string,
       +message?: ?string,
       +options: ?Array<string>,
-      +destructiveButtonIndices?: ?Array<number>,
+      // Supports Array<number> as well.
+      +destructiveButtonIndex?: ?number,
       +cancelButtonIndex?: ?number,
       +anchor?: ?number,
       +tintColor?: ?number,

@@ -1,4 +1,4 @@
-/*
+/**
  * Copyright (c) Facebook, Inc. and its affiliates.
  *
  * This source code is licensed under the MIT license found in the
@@ -38,7 +38,7 @@ inline void fromString(const std::string &string, AccessibilityTraits &result) {
     result = AccessibilityTraits::PlaysSound;
     return;
   }
-  if (string == "keyboardkey" || string == "key") {
+  if (string == "keyboardkey") {
     result = AccessibilityTraits::KeyboardKey;
     return;
   }
@@ -78,16 +78,7 @@ inline void fromString(const std::string &string, AccessibilityTraits &result) {
     result = AccessibilityTraits::Header;
     return;
   }
-  if (string == "imagebutton") {
-    result = AccessibilityTraits::Image | AccessibilityTraits::Button;
-    return;
-  }
-  if (string == "summary") {
-    result = AccessibilityTraits::SummaryElement;
-    return;
-  }
-
-  result = AccessibilityTraits::None;
+  abort();
 }
 
 inline void fromRawValue(const RawValue &value, AccessibilityTraits &result) {

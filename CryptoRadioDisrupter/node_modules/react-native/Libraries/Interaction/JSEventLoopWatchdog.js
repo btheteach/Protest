@@ -15,12 +15,7 @@ const performanceNow = require('fbjs/lib/performanceNow');
 
 type Handler = {
   onIterate?: () => void,
-  onStall: (params: {
-    lastInterval: number,
-    busyTime: number,
-    ...
-  }) => ?string,
-  ...
+  onStall: (params: {lastInterval: number, busyTime: number}) => ?string,
 };
 
 /**
@@ -49,7 +44,7 @@ const JSEventLoopWatchdog = {
   addHandler: function(handler: Handler) {
     handlers.push(handler);
   },
-  install: function({thresholdMS}: {thresholdMS: number, ...}) {
+  install: function({thresholdMS}: {thresholdMS: number}) {
     acceptableBusyTime = thresholdMS;
     if (installed) {
       return;

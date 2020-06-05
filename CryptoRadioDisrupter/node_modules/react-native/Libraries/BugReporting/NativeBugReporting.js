@@ -8,8 +8,8 @@
  * @flow
  */
 
-import type {TurboModule} from '../TurboModule/RCTExport';
 import * as TurboModuleRegistry from '../TurboModule/TurboModuleRegistry';
+import type {TurboModule} from '../TurboModule/RCTExport';
 
 export interface Spec extends TurboModule {
   +startReportAProblemFlow: () => void;
@@ -17,4 +17,4 @@ export interface Spec extends TurboModule {
   +setCategoryID: (categoryID: string) => void;
 }
 
-export default (TurboModuleRegistry.get<Spec>('BugReporting'): ?Spec);
+export default TurboModuleRegistry.get<Spec>('BugReporting');

@@ -1,9 +1,7 @@
-/*
- * Copyright (c) Facebook, Inc. and its affiliates.
- *
- * This source code is licensed under the MIT license found in the
- * LICENSE file in the root directory of this source tree.
- */
+// Copyright (c) Facebook, Inc. and its affiliates.
+
+// This source code is licensed under the MIT license found in the
+// LICENSE file in the root directory of this source tree.
 
 #pragma once
 
@@ -109,7 +107,7 @@ private:
   bool m_applicationScriptHasFailure = false;
 
   #ifdef WITH_FBSYSTRACE
-  std::atomic_uint_least32_t m_systraceCookie = ATOMIC_VAR_INIT(0);
+  std::atomic_uint_least32_t m_systraceCookie = ATOMIC_VAR_INIT();
   #endif
 };
 

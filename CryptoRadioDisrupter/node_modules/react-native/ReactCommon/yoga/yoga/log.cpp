@@ -1,10 +1,9 @@
 /*
  * Copyright (c) Facebook, Inc. and its affiliates.
  *
- * This source code is licensed under the MIT license found in the
- * LICENSE file in the root directory of this source tree.
+ * This source code is licensed under the MIT license found in the LICENSE
+ * file in the root directory of this source tree.
  */
-
 #include "log.h"
 
 #include "Yoga.h"
@@ -33,7 +32,7 @@ void vlog(
 }
 } // namespace
 
-YOGA_EXPORT void Log::log(
+void Log::log(
     YGNode* node,
     YGLogLevel level,
     void* context,

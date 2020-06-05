@@ -1,4 +1,4 @@
-/*
+/**
  * Copyright (c) Facebook, Inc. and its affiliates.
  *
  * This source code is licensed under the MIT license found in the
@@ -9,6 +9,7 @@
 
 #import <AVFoundation/AVFoundation.h>
 
+#import "RCTAccessibilityManager.h"
 #import "RCTAssert.h"
 #import "RCTBridge+Private.h"
 #import "RCTBridge.h"
@@ -86,6 +87,11 @@ RCT_EXPORT_MODULE()
 + (BOOL)requiresMainQueueSetup
 {
   return NO;
+}
+
+- (void)dealloc
+{
+  [NSNotificationCenter.defaultCenter removeObserver:self];
 }
 
 - (void)invalidate
@@ -175,9 +181,8 @@ RCT_EXPORT_MODULE()
   dispatch_async(dispatch_get_main_queue(), ^{
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(didReceiveNewContentSizeMultiplier)
-                                                 name:@"RCTAccessibilityManagerDidUpdateMultiplierNotification"
-                                               object:[self->_bridge moduleForName:@"AccessibilityManager"
-                                                             lazilyLoadIfNecessary:YES]];
+                                                 name:RCTAccessibilityManagerDidUpdateMultiplierNotification
+                                               object:self->_bridge.accessibilityManager];
   });
 #if !TARGET_OS_TV
   [[NSNotificationCenter defaultCenter] addObserver:self
@@ -195,12 +200,8 @@ RCT_EXPORT_MODULE()
   // Report the event across the bridge.
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wdeprecated-declarations"
-  id multiplier = [[self->_bridge moduleForName:@"AccessibilityManager"
-                          lazilyLoadIfNecessary:YES] valueForKey:@"multiplier"];
-  if (multiplier) {
-    [_bridge.eventDispatcher sendDeviceEventWithName:@"didUpdateContentSizeMultiplier"
-                                                body:multiplier];
-  }
+  [_bridge.eventDispatcher sendDeviceEventWithName:@"didUpdateContentSizeMultiplier"
+                                              body:@([_bridge.accessibilityManager multiplier])];
 #pragma clang diagnostic pop
 
   RCTExecuteOnUIManagerQueue(^{
@@ -330,25 +331,7 @@ static NSDictionary *deviceOrientationEventBody(UIDeviceOrientation orientation)
 - (NSString *)viewNameForReactTag:(NSNumber *)reactTag
 {
   RCTAssertUIManagerQueue();
-  NSString *name = _shadowViewRegistry[reactTag].viewName;
-  if (name) {
-    return name;
-  }
-
-  __block UIView *view;
-  RCTUnsafeExecuteOnMainQueueSync(^{
-    view = self->_viewRegistry[reactTag];
-  });
-
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wundeclared-selector"
-
-  if ([view respondsToSelector:@selector(componentViewName_DO_NOT_USE_THIS_IS_BROKEN)]) {
-    return [view performSelector:@selector(componentViewName_DO_NOT_USE_THIS_IS_BROKEN)];
-  }
-
-#pragma clang diagnostic pop
-  return nil;
+  return _shadowViewRegistry[reactTag].viewName;
 }
 
 - (UIView *)viewForReactTag:(NSNumber *)reactTag
@@ -988,7 +971,7 @@ RCT_EXPORT_METHOD(createView:(nonnull NSNumber *)reactTag
       return;
     }
 
-    preliminaryCreatedView = [componentData createViewWithTag:reactTag rootTag:rootTag];
+    preliminaryCreatedView = [componentData createViewWithTag:reactTag];
 
     if (preliminaryCreatedView) {
       self->_viewRegistry[reactTag] = preliminaryCreatedView;
@@ -1154,7 +1137,7 @@ RCT_EXPORT_METHOD(dispatchViewManagerCommand:(nonnull NSNumber *)reactTag
   }];
 }
 
-- (void)flushUIBlocksWithCompletion:(void (^)(void))completion
+- (void)flushUIBlocksWithCompletion:(void (^)(void))completion;
 {
   RCTAssertUIManagerQueue();
 

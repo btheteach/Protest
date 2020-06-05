@@ -7,7 +7,6 @@
  * @flow strict-local
  * @format
  */
-
 'use strict';
 
 // In bridgeless mode, timers are host functions installed from cpp.

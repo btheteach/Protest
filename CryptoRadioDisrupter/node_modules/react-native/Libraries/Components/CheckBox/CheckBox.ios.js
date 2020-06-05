@@ -7,7 +7,6 @@
  * @flow strict-local
  * @format
  */
-
 'use strict';
 
 module.exports = require('../UnimplementedViews/UnimplementedView');

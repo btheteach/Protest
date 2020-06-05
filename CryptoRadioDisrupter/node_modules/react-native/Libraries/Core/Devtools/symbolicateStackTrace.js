@@ -19,28 +19,13 @@ let fetch;
 
 import type {StackFrame} from '../NativeExceptionsManager';
 
-export type CodeFrame = $ReadOnly<{|
-  content: string,
-  location: ?{
-    row: number,
-    column: number,
-    ...
-  },
-  fileName: string,
-|}>;
-
-export type SymbolicatedStackTrace = $ReadOnly<{|
-  stack: Array<StackFrame>,
-  codeFrame: ?CodeFrame,
-|}>;
-
 function isSourcedFromDisk(sourcePath: string): boolean {
   return !/^http/.test(sourcePath) && /[\\/]/.test(sourcePath);
 }
 
 async function symbolicateStackTrace(
   stack: Array<StackFrame>,
-): Promise<SymbolicatedStackTrace> {
+): Promise<Array<StackFrame>> {
   // RN currently lazy loads whatwg-fetch using a custom fetch module, which,
   // when called for the first time, requires and re-exports 'whatwg-fetch'.
   // However, when a dependency of the project tries to require whatwg-fetch
@@ -89,7 +74,8 @@ async function symbolicateStackTrace(
     method: 'POST',
     body: JSON.stringify({stack: stackCopy}),
   });
-  return await response.json();
+  const json = await response.json();
+  return json.stack;
 }
 
 module.exports = symbolicateStackTrace;

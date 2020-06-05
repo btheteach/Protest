@@ -1,13 +1,11 @@
-/*
- * Copyright (c) Facebook, Inc. and its affiliates.
- *
- * This source code is licensed under the MIT license found in the
- * LICENSE file in the root directory of this source tree.
- */
+// Copyright (c) Facebook, Inc. and its affiliates.
+//
+// This source code is licensed under the MIT license found in the
+// LICENSE file in the root directory of this source tree.
 
 #import <React/RCTInspectorPackagerConnection.h>
 
-#if RCT_DEV
+#if RCT_DEV && !TARGET_OS_UIKITFORMAC
 
 #import <React/RCTDefines.h>
 #import <React/RCTInspector.h>
@@ -241,11 +239,6 @@ RCT_NOT_IMPLEMENTED(- (instancetype)init)
   }
 }
 
-- (bool)isConnected
-{
-  return _webSocket != nil;
-}
-
 - (void)connect
 {
   if (_closed) {
@@ -294,7 +287,7 @@ RCT_NOT_IMPLEMENTED(- (instancetype)init)
 - (void)sendToPackager:(NSDictionary *)messageObject
 {
   __weak RCTInspectorPackagerConnection *weakSelf = self;
-  dispatch_async(_jsQueue, ^{
+  dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
     RCTInspectorPackagerConnection *strongSelf = weakSelf;
     if (strongSelf && !strongSelf->_closed) {
       NSError *error;

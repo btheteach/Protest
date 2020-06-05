@@ -10,21 +10,15 @@
 
 'use strict';
 
-import type {
-  BlurEvent,
-  FocusEvent,
-  MouseEvent,
-  PressEvent,
-  Layout,
-  LayoutEvent,
-} from '../../Types/CoreEventTypes';
+import type {PressEvent, Layout, LayoutEvent} from '../../Types/CoreEventTypes';
 import type {EdgeInsetsProp} from '../../StyleSheet/EdgeInsetsPropType';
 import type {Node} from 'react';
 import type {ViewStyleProp} from '../../StyleSheet/StyleSheet';
+import type {TVViewProps} from '../AppleTV/TVViewPropTypes';
 import type {
   AccessibilityRole,
+  AccessibilityStates,
   AccessibilityState,
-  AccessibilityValue,
   AccessibilityActionEvent,
   AccessibilityActionInfo,
 } from './ViewAccessibility';
@@ -32,18 +26,13 @@ import type {
 export type ViewLayout = Layout;
 export type ViewLayoutEvent = LayoutEvent;
 
-type BubblingEventProps = $ReadOnly<{|
-  onBlur?: ?(event: BlurEvent) => mixed,
-  onFocus?: ?(event: FocusEvent) => mixed,
-|}>;
-
 type DirectEventProps = $ReadOnly<{|
   /**
    * When `accessible` is true, the system will try to invoke this function
    * when the user performs an accessibility custom action.
    *
    */
-  onAccessibilityAction?: ?(event: AccessibilityActionEvent) => mixed,
+  onAccessibilityAction?: ?(event: AccessibilityActionEvent) => void,
 
   /**
    * When `accessible` is true, the system will try to invoke this function
@@ -51,7 +40,7 @@ type DirectEventProps = $ReadOnly<{|
    *
    * See http://facebook.github.io/react-native/docs/view.html#onaccessibilitytap
    */
-  onAccessibilityTap?: ?() => mixed,
+  onAccessibilityTap?: ?() => void,
 
   /**
    * Invoked on mount and layout changes with:
@@ -72,7 +61,7 @@ type DirectEventProps = $ReadOnly<{|
    *
    * See http://facebook.github.io/react-native/docs/view.html#onmagictap
    */
-  onMagicTap?: ?() => mixed,
+  onMagicTap?: ?() => void,
 
   /**
    * When `accessible` is `true`, the system will invoke this function when the
@@ -80,12 +69,7 @@ type DirectEventProps = $ReadOnly<{|
    *
    * See http://facebook.github.io/react-native/docs/view.html#onaccessibilityescape
    */
-  onAccessibilityEscape?: ?() => mixed,
-|}>;
-
-type MouseEventProps = $ReadOnly<{|
-  onMouseEnter?: (event: MouseEvent) => void,
-  onMouseLeave?: (event: MouseEvent) => void,
+  onAccessibilityEscape?: ?() => void,
 |}>;
 
 type TouchEventProps = $ReadOnly<{|
@@ -292,13 +276,6 @@ type AndroidViewProps = $ReadOnly<{|
   importantForAccessibility?: ?('auto' | 'yes' | 'no' | 'no-hide-descendants'),
 
   /**
-   * Whether to force the Android TV focus engine to move focus to this view.
-   *
-   * @platform android
-   */
-  hasTVPreferredFocus?: ?boolean,
-
-  /**
    * TV next focus down (see documentation for the View component).
    *
    * @platform android
@@ -345,7 +322,7 @@ type AndroidViewProps = $ReadOnly<{|
    *
    * @platform android
    */
-  onClick?: ?(event: PressEvent) => mixed,
+  onClick?: () => void,
 |}>;
 
 type IOSViewProps = $ReadOnly<{|
@@ -388,13 +365,15 @@ type IOSViewProps = $ReadOnly<{|
 |}>;
 
 export type ViewProps = $ReadOnly<{|
-  ...BubblingEventProps,
   ...DirectEventProps,
   ...GestureResponderEventProps,
-  ...MouseEventProps,
   ...TouchEventProps,
   ...AndroidViewProps,
   ...IOSViewProps,
+
+  // There's no easy way to create a different type if (Platform.isTV):
+  // so we must include TVViewProps
+  ...TVViewProps,
 
   children?: Node,
   style?: ?ViewStyleProp,
@@ -434,8 +413,8 @@ export type ViewProps = $ReadOnly<{|
   /**
    * Indicates to accessibility services that UI Component is in a specific State.
    */
+  accessibilityStates?: ?AccessibilityStates,
   accessibilityState?: ?AccessibilityState,
-  accessibilityValue?: ?AccessibilityValue,
 
   /**
    * Provides an array of custom actions available for accessibility.

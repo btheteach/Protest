@@ -20,7 +20,7 @@ export interface Spec extends TurboModule {
       url: string,
       data: Object,
       headers: Object,
-      responseType: string,
+      responseType: Object, // TODO: Use stricter type.
       incrementalUpdates: boolean,
       timeout: number,
       withCredentials: boolean,

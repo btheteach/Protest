@@ -1,4 +1,4 @@
-/*
+/**
  * Copyright (c) Facebook, Inc. and its affiliates.
  *
  * This source code is licensed under the MIT license found in the
@@ -8,40 +8,42 @@
 #include "ImageResponseObserverCoordinator.h"
 
 #include <algorithm>
-#include <cassert>
 
 namespace facebook {
 namespace react {
 
+ImageResponseObserverCoordinator::ImageResponseObserverCoordinator() {
+  status_ = ImageResponse::Status::Loading;
+}
+
+ImageResponseObserverCoordinator::~ImageResponseObserverCoordinator() {}
+
 void ImageResponseObserverCoordinator::addObserver(
-    ImageResponseObserver const &observer) const {
-  mutex_.lock();
-  switch (status_) {
-    case ImageResponse::Status::Loading: {
-      observers_.push_back(&observer);
-      mutex_.unlock();
-      break;
-    }
-    case ImageResponse::Status::Completed: {
-      auto imageData = imageData_;
-      mutex_.unlock();
-      observer.didReceiveImage(ImageResponse{imageData});
-      break;
-    }
-    case ImageResponse::Status::Failed: {
-      mutex_.unlock();
-      observer.didReceiveFailure();
-      break;
-    }
+    ImageResponseObserver *observer) const {
+  ImageResponse::Status status = [this] {
+    std::shared_lock<better::shared_mutex> read(mutex_);
+    return status_;
+  }();
+
+  if (status == ImageResponse::Status::Loading) {
+    std::unique_lock<better::shared_mutex> write(mutex_);
+    observers_.push_back(observer);
+  } else if (status == ImageResponse::Status::Completed) {
+    ImageResponse imageResponseCopy = [this] {
+      std::unique_lock<better::shared_mutex> read(mutex_);
+      return ImageResponse(imageData_);
+    }();
+    observer->didReceiveImage(imageResponseCopy);
+  } else {
+    observer->didReceiveFailure();
   }
 }
 
 void ImageResponseObserverCoordinator::removeObserver(
-    ImageResponseObserver const &observer) const {
-  std::lock_guard<std::mutex> lock(mutex_);
+    ImageResponseObserver *observer) const {
+  std::unique_lock<better::shared_mutex> write(mutex_);
 
-  // We remove only one element to maintain a balance between add/remove calls.
-  auto position = std::find(observers_.begin(), observers_.end(), &observer);
+  auto position = std::find(observers_.begin(), observers_.end(), observer);
   if (position != observers_.end()) {
     observers_.erase(position, observers_.end());
   }
@@ -49,38 +51,50 @@ void ImageResponseObserverCoordinator::removeObserver(
 
 void ImageResponseObserverCoordinator::nativeImageResponseProgress(
     float progress) const {
-  mutex_.lock();
-  auto observers = observers_;
-  assert(status_ == ImageResponse::Status::Loading);
-  mutex_.unlock();
+  std::vector<ImageResponseObserver *> observersCopy = [this] {
+    std::shared_lock<better::shared_mutex> read(mutex_);
+    return observers_;
+  }();
 
-  for (auto observer : observers) {
+  for (auto observer : observersCopy) {
     observer->didReceiveProgress(progress);
   }
 }
 
 void ImageResponseObserverCoordinator::nativeImageResponseComplete(
-    ImageResponse const &imageResponse) const {
-  mutex_.lock();
-  imageData_ = imageResponse.getImage();
-  assert(status_ == ImageResponse::Status::Loading);
-  status_ = ImageResponse::Status::Completed;
-  auto observers = observers_;
-  mutex_.unlock();
+    const ImageResponse &imageResponse) const {
+  {
+    std::unique_lock<better::shared_mutex> write(mutex_);
+    imageData_ = imageResponse.getImage();
+    status_ = ImageResponse::Status::Completed;
+  }
 
-  for (auto observer : observers_) {
-    observer->didReceiveImage(imageResponse);
+  std::vector<ImageResponseObserver *> observersCopy = [this] {
+    std::shared_lock<better::shared_mutex> read(mutex_);
+    return observers_;
+  }();
+
+  for (auto observer : observersCopy) {
+    ImageResponse imageResponseCopy = [this] {
+      std::unique_lock<better::shared_mutex> read(mutex_);
+      return ImageResponse(imageData_);
+    }();
+    observer->didReceiveImage(imageResponseCopy);
   }
 }
 
 void ImageResponseObserverCoordinator::nativeImageResponseFailed() const {
-  mutex_.lock();
-  assert(status_ == ImageResponse::Status::Loading);
-  status_ = ImageResponse::Status::Failed;
-  auto observers = observers_;
-  mutex_.unlock();
+  {
+    std::unique_lock<better::shared_mutex> write(mutex_);
+    status_ = ImageResponse::Status::Failed;
+  }
 
-  for (auto observer : observers) {
+  std::vector<ImageResponseObserver *> observersCopy = [this] {
+    std::shared_lock<better::shared_mutex> read(mutex_);
+    return observers_;
+  }();
+
+  for (auto observer : observersCopy) {
     observer->didReceiveFailure();
   }
 }

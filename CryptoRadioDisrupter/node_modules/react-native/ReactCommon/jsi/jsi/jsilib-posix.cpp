@@ -1,10 +1,9 @@
 /*
  * Copyright (c) Facebook, Inc. and its affiliates.
  *
- * This source code is licensed under the MIT license found in the
- * LICENSE file in the root directory of this source tree.
+ * This source code is licensed under the MIT license found in the LICENSE
+ * file in the root directory of this source tree.
  */
-
 #ifndef _WINDOWS
 
 #include <fcntl.h>
@@ -13,7 +12,6 @@
 #include <sys/types.h>
 #include <unistd.h>
 #include <cerrno>
-#include <cstdarg>
 #include <stdexcept>
 
 #include <jsi/jsilib.h>

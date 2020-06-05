@@ -13,11 +13,7 @@
 const FlatList = require('../FlatList');
 const React = require('react');
 
-function renderMyListItem(info: {
-  item: {title: string, ...},
-  index: number,
-  ...
-}) {
+function renderMyListItem(info: {item: {title: string}, index: number}) {
   return <span />;
 }
 
@@ -97,7 +93,7 @@ module.exports = {
       />,
       // EverythingIsFine
       <FlatList
-        renderItem={(info: {item: {title: string, ...}, ...}) => <span />}
+        renderItem={(info: {item: {title: string}}) => <span />}
         data={data}
       />,
     ];

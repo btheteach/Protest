@@ -1,9 +1,7 @@
-/*
- * Copyright (c) Facebook, Inc. and its affiliates.
- *
- * This source code is licensed under the MIT license found in the
- * LICENSE file in the root directory of this source tree.
- */
+// Copyright (c) Facebook, Inc. and its affiliates.
+
+// This source code is licensed under the MIT license found in the
+// LICENSE file in the root directory of this source tree.
 
 package com.facebook.react.bridge;
 
@@ -14,7 +12,6 @@ import static com.facebook.systrace.Systrace.TRACE_TAG_REACT_JAVA_BRIDGE;
 
 import androidx.annotation.GuardedBy;
 import androidx.annotation.Nullable;
-import com.facebook.common.logging.FLog;
 import com.facebook.debug.holder.PrinterHolder;
 import com.facebook.debug.tags.ReactDebugOverlayTags;
 import com.facebook.infer.annotation.Assertions;
@@ -101,7 +98,7 @@ public class ModuleHolder {
     }
   }
 
-  /* package */ synchronized boolean hasInstance() {
+  /* pacakge */ synchronized boolean hasInstance() {
     return mModule != null;
   }
 
@@ -200,17 +197,6 @@ public class ModuleHolder {
       if (shouldInitializeNow) {
         doInitialize(module);
       }
-    } catch (Throwable ex) {
-      /**
-       * When NativeModules are created from JavaScript, any exception that occurs in the creation
-       * process will have its stack trace swallowed before we display a RedBox to the user. Really,
-       * we should have our HostObjects on Android understand JniExceptions and log the stack trace
-       * to logcat. For now, logging to Logcat directly when creation fails is sufficient.
-       *
-       * @todo(T53311351)
-       */
-      FLog.e("NativeModuleInitError", "Failed to create NativeModule \"" + getName() + "\"", ex);
-      throw ex;
     } finally {
       ReactMarker.logMarker(CREATE_MODULE_END, mName, mInstanceKey);
       SystraceMessage.endSection(TRACE_TAG_REACT_JAVA_BRIDGE).flush();

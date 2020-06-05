@@ -30,14 +30,7 @@ module.exports = {
     }),
     PropTypes.number,
   ]): React$PropType$Primitive<
-    | {
-        height?: number,
-        scale?: number,
-        uri?: string,
-        width?: number,
-        ...
-      }
-    | number,
+    {height?: number, scale?: number, uri?: string, width?: number} | number,
   >),
 
   accessible: PropTypes.bool,

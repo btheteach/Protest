@@ -23,10 +23,6 @@ export const shallow = (Component: React.Element<any>): any => {
   return renderer.render(<Wrapper />);
 };
 
-export const shallowRender = (Component: React.Element<any>): any => {
-  return renderer.render(Component);
-};
-
 export const create = (Component: React.Element<any>): any => {
   return TestRenderer.create(Component);
 };

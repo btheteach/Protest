@@ -153,11 +153,11 @@ class Button extends React.Component<ButtonProps> {
         buttonStyles.push({backgroundColor: color});
       }
     }
-    const accessibilityState = {};
+    const accessibilityStates = [];
     if (disabled) {
       buttonStyles.push(styles.buttonDisabled);
       textStyles.push(styles.textDisabled);
-      accessibilityState.disabled = true;
+      accessibilityStates.push('disabled');
     }
     invariant(
       typeof title === 'string',
@@ -171,7 +171,7 @@ class Button extends React.Component<ButtonProps> {
       <Touchable
         accessibilityLabel={accessibilityLabel}
         accessibilityRole="button"
-        accessibilityState={accessibilityState}
+        accessibilityStates={accessibilityStates}
         hasTVPreferredFocus={hasTVPreferredFocus}
         nextFocusDown={nextFocusDown}
         nextFocusForward={nextFocusForward}
@@ -204,7 +204,7 @@ const styles = StyleSheet.create({
   }),
   text: {
     textAlign: 'center',
-    margin: 8,
+    padding: 8,
     ...Platform.select({
       ios: {
         // iOS blue from https://developer.apple.com/ios/human-interface-guidelines/visual-design/color/

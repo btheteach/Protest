@@ -7,7 +7,6 @@
  * @flow strict-local
  * @format
  */
-
 'use strict';
 
 import type {TurboModule} from '../../TurboModule/RCTExport';

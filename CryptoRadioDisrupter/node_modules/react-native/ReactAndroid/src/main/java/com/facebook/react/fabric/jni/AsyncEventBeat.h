@@ -1,9 +1,6 @@
-/*
- * Copyright (c) Facebook, Inc. and its affiliates.
- *
- * This source code is licensed under the MIT license found in the
- * LICENSE file in the root directory of this source tree.
- */
+// Copyright 2004-present Facebook. All Rights Reserved.
+// This source code is licensed under the MIT license found in the
+// LICENSE file in the root directory of this source tree.
 
 #pragma once
 
@@ -16,37 +13,35 @@
 namespace facebook {
 namespace react {
 
-class AsyncEventBeat final : public EventBeat, public EventBeatManagerObserver {
+namespace {
+
+class AsyncEventBeat : public EventBeat {
+ private:
+  EventBeatManager* eventBeatManager_;
+  RuntimeExecutor runtimeExecutor_;
+  jni::global_ref<jobject> javaUIManager_;
+
  public:
+  friend class EventBeatManager;
+
   AsyncEventBeat(
-      EventBeat::SharedOwnerBox const &ownerBox,
-      EventBeatManager *eventBeatManager,
+      EventBeatManager* eventBeatManager,
       RuntimeExecutor runtimeExecutor,
-      jni::global_ref<jobject> javaUIManager)
-      : EventBeat(ownerBox),
-        eventBeatManager_(eventBeatManager),
-        runtimeExecutor_(runtimeExecutor),
-        javaUIManager_(javaUIManager) {
-    eventBeatManager->addObserver(*this);
+      jni::global_ref<jobject> javaUIManager) :
+      eventBeatManager_(eventBeatManager),
+      runtimeExecutor_(std::move(runtimeExecutor)),
+      javaUIManager_(javaUIManager) {
+    eventBeatManager->registerEventBeat(this);
   }
 
   ~AsyncEventBeat() {
-    eventBeatManager_->removeObserver(*this);
-  }
-
-  void tick() const override {
-    runtimeExecutor_([this, ownerBox = ownerBox_](jsi::Runtime &runtime) {
-      auto owner = ownerBox->owner.lock();
-      if (!owner) {
-        return;
-      }
-
-      this->beat(runtime);
-    });
+    eventBeatManager_->unregisterEventBeat(this);
   }
 
   void induce() const override {
-    tick();
+    runtimeExecutor_([=](jsi::Runtime &runtime) {
+      this->beat(runtime);
+    });
   }
 
   void request() const override {
@@ -60,12 +55,9 @@ class AsyncEventBeat final : public EventBeat, public EventBeatManagerObserver {
       onRequestEventBeat(javaUIManager_);
     }
   }
-
- private:
-  EventBeatManager *eventBeatManager_;
-  RuntimeExecutor runtimeExecutor_;
-  jni::global_ref<jobject> javaUIManager_;
 };
+
+} // namespace
 
 } // namespace react
 } // namespace facebook

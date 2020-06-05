@@ -1,10 +1,9 @@
-/*
+/**
  * Copyright (c) Facebook, Inc. and its affiliates.
  *
- * This source code is licensed under the MIT license found in the
- * LICENSE file in the root directory of this source tree.
+ * <p>This source code is licensed under the MIT license found in the LICENSE file in the root
+ * directory of this source tree.
  */
-
 package com.facebook.react.bridge;
 
 import android.content.Context;
@@ -32,6 +31,17 @@ public interface JSBundleLoaderDelegate {
    * @param loadSynchronously
    */
   void loadScriptFromFile(String fileName, String sourceURL, boolean loadSynchronously);
+
+  /**
+   * Load a delta bundle from Metro. See {@link JSBundleLoader#createDeltaFromNetworkLoader(String,
+   * NativeDeltaClient)}
+   *
+   * @param sourceURL
+   * @param deltaClient
+   * @param loadSynchronously
+   */
+  void loadScriptFromDeltaBundle(
+      String sourceURL, NativeDeltaClient deltaClient, boolean loadSynchronously);
 
   /**
    * This API is used in situations where the JS bundle is being executed not on the device, but on
