@@ -5,7 +5,11 @@ import { Toast } from 'native-base'
 import * as Animatable from 'react-native-animatable'
 import { humanFont, sanFranciscoWeights } from 'react-native-typography'
 import { addCluster, createSeed } from '../Redux/actions'
-import { generateChannels, TIME_INTERVAL, MILLISECONDS, MINUTE_IN_MILLISECONDS } from '../shared/shared'
+import { 
+  generateChannels, 
+  TIME_INTERVAL,
+  getTimeout
+} from '../shared/shared'
 
 const copyToClipboard = (seedID) => {
   Toast.show({
@@ -37,22 +41,10 @@ function SeedCard ({ groupName, seedID, interval }) {
     }
     firstIteration()
 
-    let timerID,
-    moment = new Date() 
-    timoutInMilliseconds = intervalAsInt === TIME_INTERVAL.THIRTY_SECONDS
-      ? moment.getSeconds() * MILLISECONDS
-      : (moment.getMinutes() * MINUTE_IN_MILLISECONDS) + (moment.getSeconds * MILLISECONDS)
-
-    timoutInMilliseconds %= intervalAsInt
+    let timeoutInMilliseconds = getTimeout(intervalAsInt)
     setTimeout(() => {
-      timerID = setInterval(() => {
-        getChannels(seedIDAsInt, setFrequency)
-      }, interval)
-    }, timoutInMilliseconds)
-    
-    const unsubscribe = () => clearInterval(timerID)
-
-    return unsubscribe
+      getChannels(seedIDAsInt, setFrequency)
+    }, timeoutInMilliseconds)
   }, [frequency])
 
   return (

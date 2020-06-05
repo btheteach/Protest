@@ -21,7 +21,7 @@ export const standardizeTime = time => {
         return TIME_INTERVAL.THIRTY_SECONDS
     }
 
-    switch (time) {
+    switch (parseInt(time)) {
         case 1:
             return TIME_INTERVAL.ONE_MINUTE
         case 2:
@@ -37,6 +37,17 @@ export const standardizeTime = time => {
         default:
             return TIME_INTERVAL.THIRTY_SECONDS
     }
+}
+
+export const getTimeout = (interval) => {
+    let moment = new Date(),
+        momentMilliseconds = (moment.getSeconds() * MILLISECONDS) + moment.getMilliseconds()
+
+    if (interval !== TIME_INTERVAL.THIRTY_SECONDS) {
+        moment += (moment.getMinutes() * MINUTE_IN_MILLISECONDS) 
+    }
+
+    return interval - (momentMilliseconds % interval)
 }
 
 
