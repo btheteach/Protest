@@ -12,6 +12,7 @@ import { humanFont, sanFranciscoWeights } from 'react-native-typography'
 import { connect } from "react-redux";
 import { createSeed } from "../Redux/actions";
 import SetIntervalPickerModal from './SetTimeIntervalPickerModal'
+import SetRadioChannelPickerModal from './SetRadioChannelPickerModal'
 
 class AddSeedComponent extends React.Component {
   state = {
@@ -86,6 +87,7 @@ class AddSeedComponent extends React.Component {
               <Animatable.View animation='fadeInUp'>
                 {this.NameField()}
                 <SetIntervalPickerModal />
+                <SetRadioChannelPickerModal />
               </Animatable.View>
               <Animatable.View animation='fadeInUp'>
                 <Button bordered onPress={this.createNewCard} style={AddSeedCardComponentStyle.CreateSeedComponentButton}>

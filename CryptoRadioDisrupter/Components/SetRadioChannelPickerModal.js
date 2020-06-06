@@ -3,58 +3,25 @@ import { StyleSheet, View } from 'react-native'
 import RNPicker from 'rn-modal-picker'
 import { humanFont, sanFranciscoWeights } from 'react-native-typography'
 
-export default class SetTimeIntervalPickerModal extends Component {
+export default class SetRadioChannelPickerModel extends Component {
   constructor (props) {
     super(props)
     this.state = {
-      TimeIntervals: [
+      RadioChannels: [
         {
           id: 0,
-          name: '30 Seconds',
-          time_interval: 'THIRTY_SECONDS'
+          name: 'Join Any'
         },
         {
           id: 1,
-          name: '1 Minute',
-          time_interval: 'ONE_MINUTE'
+          name: 'Channel 1'
         },
         {
           id: 2,
-          name: '2 Minutes',
-          time_interval: 'TWO_MINUTES'
-        },
-        {
-          id: 3,
-          name: '5 Minutes',
-          time_interval: 'FIVE_MINUTES'
-        },
-        {
-          id: 4,
-          name: '10 Minutes',
-          time_interval: 'TEN_MINUTES'
-        },
-        {
-          id: 5,
-          name: '15 Minutes',
-          time_interval: 'FIFTEEN_MINUTES'
-        },
-        {
-          id: 6,
-          name: '20 Minutes',
-          time_interval: 'TWENTY_MINUTES'
-        },
-        {
-          id: 7,
-          name: '30 Minutes',
-          time_interval: 'THIRTY_MINUTES'
-        },
-        {
-          id: 8,
-          name: '1 Hour',
-          time_interval: 'ONE_HOUR'
+          name: 'Channel 2'
         }
       ],
-      placeHolderText: 'Enter Time Interval',
+      placeHolderText: 'Enter Radio Channel',
       selectedText: ''
     }
   }
@@ -65,25 +32,25 @@ export default class SetTimeIntervalPickerModal extends Component {
 
   render () {
     return (
-      <View style={SetTimeIntervalPickerModalStyle.Container}>
+      <View style={SetRadioChannelPickerModalStyle.Container}>
         <RNPicker
-          dataSource={this.state.TimeIntervals}
-          dummyDataSource={this.state.TimeIntervals}
+          dataSource={this.state.RadioChannels}
+          dummyDataSource={this.state.RadioChannels}
           defaultValue={false}
           showSearchBar
           disablePicker={false}
           changeAnimation='fade'
-          searchBarPlaceHolder='Enter an Interval'
+          searchBarPlaceHolder='Enter a Radio Channel'
           showPickerTitle={false}
-          searchBarContainerStyle={SetTimeIntervalPickerModalStyle.SearchBarContainer}
-          pickerStyle={SetTimeIntervalPickerModalStyle.PickerBox}
-          itemSeparatorStyle={SetTimeIntervalPickerModalStyle.ItemDivider}
-          pickerItemTextStyle={SetTimeIntervalPickerModalStyle.ListElementText}
+          searchBarContainerStyle={SetRadioChannelPickerModalStyle.SearchBarContainer}
+          pickerStyle={SetRadioChannelPickerModalStyle.PickerBox}
+          itemSeparatorStyle={SetRadioChannelPickerModalStyle.ItemDivider}
+          pickerItemTextStyle={SetRadioChannelPickerModalStyle.ListElementText}
           selectedLabel={this.state.selectedText}
           placeHolderLabel={this.state.placeHolderText}
-          selectLabelTextStyle={SetTimeIntervalPickerModalStyle.SelectedLabelText}
-          placeHolderTextStyle={SetTimeIntervalPickerModalStyle.PlaceholderText}
-          dropDownImageStyle={SetTimeIntervalPickerModalStyle.DropDownIcon}
+          selectLabelTextStyle={SetRadioChannelPickerModalStyle.SelectedLabelText}
+          placeHolderTextStyle={SetRadioChannelPickerModalStyle.PlaceholderText}
+          dropDownImageStyle={SetRadioChannelPickerModalStyle.DropDownIcon}
           selectedValue={(index, item) => this._selectedValue(index, item)}
         />
       </View>
@@ -91,7 +58,7 @@ export default class SetTimeIntervalPickerModal extends Component {
   }
 }
 
-const SetTimeIntervalPickerModalStyle = StyleSheet.create({
+const SetRadioChannelPickerModalStyle = StyleSheet.create({
   Container: {
     alignItems: 'center',
     justifyContent: 'center',
@@ -159,9 +126,11 @@ const SetTimeIntervalPickerModalStyle = StyleSheet.create({
     elevation: 3,
     paddingRight: 25,
     marginRight: 10,
+    marginBottom: 0,
     borderWidth: 1,
     borderColor: 'transparent',
     borderRadius: 2,
-    flexDirection: 'row'
+    flexDirection: 'row',
+    bottom: 13
   }
 })
