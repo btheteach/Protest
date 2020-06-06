@@ -91,7 +91,7 @@ class AddSeedComponent extends React.Component {
               </Animatable.View>
               <Animatable.View animation='fadeInUp'>
                 <Button bordered onPress={this.createNewCard} style={AddSeedCardComponentStyle.CreateSeedComponentButton}>
-                  <Animatable.Text animation='fadeIn' style={AddSeedCardComponentStyle.ModalButtonText}>Create Seed</Animatable.Text>
+                  <Animatable.Text animation='fadeIn' style={AddSeedCardComponentStyle.ModalButtonText}>Create Cluster</Animatable.Text>
                 </Button>
                 <Button bordered style={AddSeedCardComponentStyle.JoinClusterComponentButton}>
                   <Animatable.Text animation='fadeIn' style={AddSeedCardComponentStyle.ModalButtonText}>Join Cluster</Animatable.Text>
