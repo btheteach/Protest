@@ -61,6 +61,7 @@ const DefaultStyles = StyleSheet.create({
 /// npm i react-native-modal --save
 
 /// npm install react-native-animatable --save
+/// npm i rn-modal-picker --save
 
 /// npx expo install react-native-gesture-handler
 /// npx expo install expo-crypto

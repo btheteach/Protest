@@ -1,12 +1,12 @@
-import React, {useState, useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import { FlatList, StyleSheet, Clipboard } from 'react-native'
 import { Card } from '@paraboly/react-native-card'
 import { Toast } from 'native-base'
 import * as Animatable from 'react-native-animatable'
 import { humanFont, sanFranciscoWeights } from 'react-native-typography'
 import { addCluster, createSeed } from '../Redux/actions'
-import { 
-  generateChannels, 
+import {
+  generateChannels,
   TIME_INTERVAL,
   getTimeout
 } from '../shared/shared'
@@ -32,8 +32,9 @@ const getChannels = async (seedID, setFrequency) => await generateChannels(seedI
 
 function SeedCard ({ groupName, seedID, interval }) {
   const [frequency, setFrequency] = useState()
-  let seedIDAsInt = Number.isInteger(seedID) ? parseInt(seedID) : seedID
-  let intervalAsInt = parseInt(interval)
+  const [radioChannel, setRadioChannel] = useState()
+  const seedIDAsInt = Number.isInteger(seedID) ? parseInt(seedID) : seedID
+  const intervalAsInt = parseInt(interval)
 
   useEffect(() => {
     const firstIteration = async () => {
@@ -41,7 +42,7 @@ function SeedCard ({ groupName, seedID, interval }) {
     }
     firstIteration()
 
-    let timeoutInMilliseconds = getTimeout(intervalAsInt)
+    const timeoutInMilliseconds = getTimeout(intervalAsInt)
     setTimeout(() => {
       getChannels(seedIDAsInt, setFrequency)
     }, timeoutInMilliseconds)
@@ -52,7 +53,7 @@ function SeedCard ({ groupName, seedID, interval }) {
       title={groupName}
       titleStyle={SeedCardComponentStyle.title}
       iconDisable
-      onPress={() => copyToClipboard(seedID) }
+      onPress={() => copyToClipboard(seedID)}
       topRightText={frequency + ('Hz')}
       topRightStyle={SeedCardComponentStyle.frequencyText}
       content={seedIDAsInt}
@@ -65,7 +66,7 @@ function SeedCard ({ groupName, seedID, interval }) {
 export default function SeedCardComponent () {
   const [clusterData, setClusterData] = useState(store.getState().clusters)
   const unsubscribe = store.subscribe(() => {
-    let c = store.getState().clusters
+    const c = store.getState().clusters
     setClusterData(c)
   })
 
@@ -78,26 +79,26 @@ export default function SeedCardComponent () {
       })
 
       await store.dispatch(addAction)
-      
+
       await store.dispatch(createSeed({
         groupName: 'asdf',
         interval: TIME_INTERVAL.THIRTY_SECONDS
       }))
     }
     test()
-    
+
     return unsubscribe
   }, [])
 
   return (
     <Animatable.View animation='fadeInLeft'>
-        <FlatList
-          data={clusterData}
-          renderItem={({ item }) => <SeedCard seedID={item.seedID.toString()} groupName={item.groupName} interval={item.interval.toString()}/>} 
-          keyExtractor={(item, index) => index.toString()}
-        />
-      </Animatable.View>
-    
+      <FlatList
+        data={clusterData}
+        renderItem={({ item }) => <SeedCard seedID={item.seedID.toString()} groupName={item.groupName} interval={item.interval.toString()} />}
+        keyExtractor={(item, index) => index.toString()}
+      />
+    </Animatable.View>
+
   )
 }
 

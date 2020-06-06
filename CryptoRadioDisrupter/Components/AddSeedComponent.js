@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { StyleSheet, Text } from 'react-native'
+import { StyleSheet, View } from 'react-native'
 import Modal from 'react-native-modal'
 import Constants from 'expo-constants'
 import { BlurView } from 'expo-blur'
@@ -11,6 +11,7 @@ import * as Animatable from 'react-native-animatable'
 import { humanFont, sanFranciscoWeights } from 'react-native-typography'
 import { connect } from "react-redux";
 import { createSeed } from "../Redux/actions";
+import SetIntervalPickerModal from './SetTimeIntervalPickerModal'
 
 class AddSeedComponent extends React.Component {
   state = {
@@ -57,26 +58,6 @@ class AddSeedComponent extends React.Component {
     )
   }
 
-  IntervalField = () => {
-    return (
-      < Sae
-        label='Enter Interval'
-        labelStyle={{ color: '#f6e9e9' }}
-        iconClass={AntDesign}
-        iconName='clockcircle'
-        iconColor='#e16428'
-        placeholderTextColor='#f6e9e9'
-        inputPadding={16}
-        labelHeight={24}
-        borderHeight={2}
-        onChangeText={this.handleIntervalChange}
-        autoCapitalize='none'
-        autoCorrect={false}
-        style={AddSeedCardComponentStyle.InputFields}
-      />
-    )
-  }
-
   render() {
     return (
       <Animatable.View animation='fadeIn' >
@@ -100,15 +81,18 @@ class AddSeedComponent extends React.Component {
           backdropTransitionOutTiming={600}
         >
           <BlurView intensity={100} style={[StyleSheet.absoluteFill, AddSeedCardComponentStyle.ModalContainer]}>
-            <Animatable.Text animation='fadeInDown' style={AddSeedCardComponentStyle.ModalTitle}>Seed Generator</Animatable.Text>
+            <Animatable.Text animation='fadeInDown' style={AddSeedCardComponentStyle.ModalTitle}>Cluster Manager</Animatable.Text>
             <Animatable.View animation='fadeIn'>
               <Animatable.View animation='fadeInUp'>
                 {this.NameField()}
-                {this.IntervalField()}
+                <SetIntervalPickerModal />
               </Animatable.View>
               <Animatable.View animation='fadeInUp'>
                 <Button bordered onPress={this.createNewCard} style={AddSeedCardComponentStyle.CreateSeedComponentButton}>
                   <Animatable.Text animation='fadeIn' style={AddSeedCardComponentStyle.ModalButtonText}>Create Seed</Animatable.Text>
+                </Button>
+                <Button bordered style={AddSeedCardComponentStyle.JoinClusterComponentButton}>
+                  <Animatable.Text animation='fadeIn' style={AddSeedCardComponentStyle.ModalButtonText}>Join Cluster</Animatable.Text>
                 </Button>
                 <Button bordered onPress={this.toggleModal} style={AddSeedCardComponentStyle.CloseModalButton}>
                   <Animatable.Text animation='fadeIn' style={AddSeedCardComponentStyle.ModalButtonText}>Close</Animatable.Text>
@@ -157,6 +141,13 @@ const AddSeedCardComponentStyle = StyleSheet.create({
     height: 25
   },
   CreateSeedComponentButton: {
+    margin: 10,
+    padding: 10,
+    top: 15,
+    borderRadius: 10,
+    borderColor: '#f6e9e9'
+  },
+  JoinClusterComponentButton: {
     margin: 10,
     padding: 10,
     top: 15,
