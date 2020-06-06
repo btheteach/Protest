@@ -4,16 +4,15 @@ import AddSeedComponent from './Components/AddSeedComponent'
 import { SafeAreaView, StyleSheet, Dimensions } from 'react-native'
 import { Root } from 'native-base'
 import Constants from 'expo-constants'
+
+import store from './Redux/store'
 import * as Animatable from 'react-native-animatable'
 import { LinearGradient } from 'expo-linear-gradient'
 import { humanFont, sanFranciscoWeights } from 'react-native-typography'
 import { Provider } from 'react-redux'
-import { createStore } from 'redux'
-import rootReducer from './Redux/reducers'
 
 const windowWidth = Dimensions.get('window').width
 const windowHeight = Dimensions.get('window').height
-const store = createStore(rootReducer)
 
 export default function App () {
   return (

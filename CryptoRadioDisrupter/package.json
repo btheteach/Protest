@@ -17,6 +17,7 @@
     "expo-constants": "~9.0.0",
     "expo-crypto": "~8.1.0",
     "expo-linear-gradient": "~8.1.0",
+    "expo-random": "~8.1.0",
     "logkitty": "^0.7.1",
     "mem": "^6.1.0",
     "native-base": "^2.13.12",
@@ -36,7 +37,10 @@
     "react-native-web": "~0.11.7",
     "react-native-webview": "9.4.0",
     "react-redux": "^7.2.0",
-    "redux": "^4.0.5"
+    "redux": "^4.0.5",
+    "redux-devtools-extension": "^2.13.8",
+    "redux-logger": "^3.0.6",
+    "redux-thunk": "^2.3.0"
   },
   "devDependencies": {
     "@babel/core": "^7.8.6",

@@ -10,7 +10,7 @@ import { Sae } from 'react-native-textinput-effects'
 import * as Animatable from 'react-native-animatable'
 import { humanFont, sanFranciscoWeights } from 'react-native-typography'
 import { connect } from "react-redux";
-import { addCard } from "../Redux/actions";
+import { createSeed } from "../Redux/actions";
 
 class AddSeedComponent extends React.Component {
   state = {
@@ -32,10 +32,9 @@ class AddSeedComponent extends React.Component {
   }
 
   createNewCard = () => {
-    const card = {name: this.state.name, interval: this.state.interval}
+    const card = { groupName: this.state.name, interval: this.state.interval}
     this.props.createCard(card);
     this.toggleModal();
-    
   }
 
   NameField = () => {
@@ -190,7 +189,7 @@ const AddSeedCardComponentStyle = StyleSheet.create({
 })
 
 const mapDispatchToProps = dispatch => ({
-  createCard: card => dispatch(addCard(card)),
+  createCard: card => dispatch(createSeed(card)),
 });
 
 export default connect(null, mapDispatchToProps)(AddSeedComponent);

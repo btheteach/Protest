@@ -1,37 +1,42 @@
-import { NativeModules } from 'react-native'
-const { RNRandomBytes } = NativeModules
+import MersenneTwister from '../shared/MersenneTwister'
+import { standardizeTime } from '../shared/shared'
 
-export const GENERATE_SEED = 'GENERATE_SEED'
-export const ADD_GROUP = 'ADD_GROUP'
-export const REMOVE_GROUP = 'REMOVE_GROUP'
+export const GENERATE_CLUSTER = 'GENERATE_CLUSTER'
+export const ADD_CLUSTER = 'ADD_CLUSTER'
+export const REMOVE_CLUSTER = 'REMOVE_CLUSTER'
 export const FAIL_TO_CREATE_SEED = 'FAIL_TO_CREATE_SEED'
 export const ADD_CARD = 'ADD_CARD'
 
-export const generateSeed = seed => (
-    { type: GENERATE_SEED, seed }
+export const FAIL_TO_FETCH_LOCAL_DATA = 'FAIL_TO_FETCH_LOCAL_DATA'
+
+export const generateCluster = cluster => (
+    { type: GENERATE_CLUSTER, cluster }
 );
 
-export const addGroup = seed => (
-    { type: ADD_GROUP, seed }
+export const addCluster = cluster => (
+    { type: ADD_CLUSTER, cluster }
 );
 
-export const removeGroup = seed => (
-    { type: REMOVE_GROUP, seed }
+export const removeCluster = seedID => (
+    { type: REMOVE_CLUSTER, seedID }
 );
 
 export const failCreateSeed = error => (
     { type: FAIL_TO_CREATE_SEED, error }
 )
 
-export const addCard = card => ({
-    type: ADD_CARD,
-    payload: { name: card.name, interval: card.interval },
-});
+export const failLocalFetch = error => (
+    { type: FAIL_TO_FETCH_LOCAL_DATA, error }
+)
 
-export function createSeed() {
-    return function async(dispatch) {
-        const rand = RNRandomBytes.randomBytes(256).toString('base64')
-
-        return dispatch(generateSeed(rand))
+export function createSeed (cluster) {
+    return async function (dispatch){
+        const mt = new MersenneTwister()
+        
+        return dispatch(generateCluster({
+            ...cluster,
+            interval: standardizeTime(cluster.interval),
+            seedID: mt.int()
+        }))
     }
 }
