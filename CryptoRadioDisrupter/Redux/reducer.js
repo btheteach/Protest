@@ -2,15 +2,19 @@ import {
     GENERATE_CLUSTER,
     ADD_CLUSTER,
     REMOVE_CLUSTER,
-    FAIL_TO_CREATE_SEED
+    FAIL_TO_CREATE_SEED,
+    EMPTY_DATA,
+    OPEN_REALM
 } from './actions'
 
 const createSeed = (state = {
     error: {},
-    clusters: []
+    clusters: [],
+    realm: {}
 }, action) => {
     switch (action.type) {
         case ADD_CLUSTER:
+        case EMPTY_DATA:
         case GENERATE_CLUSTER:
             return { 
                 ...state, 
@@ -23,6 +27,11 @@ const createSeed = (state = {
             }
         case FAIL_TO_CREATE_SEED:
             return { ...state, error: action.error }
+        case OPEN_REALM:
+            return {
+                ...state,
+                realm: action.realm
+            }
         default:
             return state
     }
