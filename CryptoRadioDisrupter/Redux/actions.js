@@ -1,6 +1,6 @@
 import MersenneTwister from "../shared/MersenneTwister";
 import { standardizeTime } from "../shared/shared";
-import * as SInfo from "react-native-sensitive-info";
+import * as SecureStore from "expo-secure-store";
 
 export const GENERATE_CLUSTER = "GENERATE_CLUSTER";
 export const ADD_CLUSTER = "ADD_CLUSTER";
@@ -28,15 +28,20 @@ export const failLocalFetch = (error) => ({
 
 export function createSeed(cluster) {
   return async function (dispatch) {
-    const mt = new MersenneTwister();
-    if ((SInfo.getItem("seed") = null)) {
-      SInfo.setItem("seed", mt.int());
+    var seed;
+    try {
+      seed = SecureStore.getItemAsync("seed");
+      console.log(seed);
+    } catch (error) {
+      const mt = new MersenneTwister();
+      seed = mt.int();
+      SecureStore.setItemAsync("seed", seed);
     }
     return dispatch(
       generateCluster({
         ...cluster,
         interval: standardizeTime(cluster.interval),
-        seedID: SInfo.getItem("seed"),
+        seedID: seed,
       })
     );
   };
